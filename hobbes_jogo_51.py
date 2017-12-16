@@ -35,10 +35,34 @@ class JogoPeoes(jogos_iia.Game) :
         return
 
 
-    def display(self, state):
+    def display(self, state): #FIXME:
         """Mostra uma representacao de um estado do jogo."""
-        # TODO:
-        return
+
+        dicLinhas = {1 : '5', 2 : '4', 3 : '3', 4 : '2', 5 : '1'}
+        dicColunas = {1 : 'a', 2 : 'b', 3 : 'c', 4 : 'd', 5 : 'e'}
+        board = state.board.tabuleiro
+        print("Tabuleiro actual:")
+        for x in range(1, 6):
+            for y in range(1, 6):
+                if y == 1:
+                    print(dicLinhas[x] + '  |')
+                
+                if (y,x) in board['b'] :
+                    print(' b |')
+                elif (y,x) in board['p'] :
+                    print(' p |')
+                else :
+                    print('   |')
+                    
+            print('------------------------') # 4 traços x 6 vezes = 24 traços
+        print('     ' + dicColunas[1] + '   ' + dicColunas[2] + '   ' + dicColunas[3] + '   ' + dicColunas[4] + '   ' + dicColunas[5])
+        
+        #FIXME:
+        #if self.terminal_test(state) :
+        #   print("FIM do Jogo")
+        #else :
+        #    print("Próximo jogador:{}\n".format(state.to_move))
+        
 
     def first_step(self, tabuleiro): #TODO:
 
@@ -49,7 +73,3 @@ class JogoPeoes(jogos_iia.Game) :
 
 
     def first_step_rec(self, tabuleiro, stepped): # TODO:
-
-
-
-

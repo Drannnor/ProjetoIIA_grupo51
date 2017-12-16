@@ -1,16 +1,19 @@
 import jogos_iia.py
 
+table_size = 5
+
 class JogoPeoes(jogos_iia.Game) :
 
-    def __init__(game, state, nivel = 0):# TODO:
+    def __init__(game, state, nivel = 0):
         """O construtor."""
-
+        # TODO:
 
         return 
 
     def actions(self, state):
         """Obtencao das jogadas possiveis, dado um estado do jogo."""
         # TODO:
+
 
         
         return
@@ -36,6 +39,17 @@ class JogoPeoes(jogos_iia.Game) :
         """Mostra uma representacao de um estado do jogo."""
         # TODO:
         return
+
+    def first_step(self, tabuleiro): #TODO:
+
+        for i in range (1,table_size):
+            for j in range (1, table_size):
+
+        return first_step_rec(tabuleiro,stepped)
+
+
+    def first_step_rec(self, tabuleiro, stepped): # TODO:
+
 
 
 

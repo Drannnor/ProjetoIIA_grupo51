@@ -60,7 +60,7 @@ class JogoHobbes(jogos_iia.Game):
         jogadas = state.board[0]
         tab = state.board[1]
         if not self.action(state) or jogadas == 50:
-            return true
+            return True
         else:
             search = (0,0,0)
             for x in range (1, self.size):
@@ -69,10 +69,10 @@ class JogoHobbes(jogos_iia.Game):
                         if search == (0,0):
                             search = (x, y)
                         else:
-                            search = (mod(search[0] - x), mod(search[1] - y)
-                            if search[0] == 0 and search[1] <= 1
-                    
-        return
+                            search = (mod(search[0] - x), mod(search[1] - y))
+                            if (search[0] == 0 and search[1] <= 1) or (search[0] <= 0 and search[1] == 1):
+                                return True
+            return False        
 
     def display(self, state): #FIXME:
         """Mostra uma representacao de um estado do jogo."""

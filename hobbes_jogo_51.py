@@ -4,7 +4,7 @@ table_size = 5
 
 class JogoHobbes(jogos_iia.Game):
 
-    def __init__(self,game, state, nivel = 0):
+    def __init__(self):
         """O construtor."""
         # TODO:
         return
@@ -14,7 +14,9 @@ class JogoHobbes(jogos_iia.Game):
         # TODO:
         result = []
         tabuleiro = state.board.tabuleiro
-        first_steps = self.first_step(tabuleiro)
+        posicoes = 
+        rei
+        first_steps = self.first_step(tabuleiro, rei)
         for pos in first_steps:
             result = result + self.second_step(pos,tabuleiro)
         return result
@@ -32,7 +34,7 @@ class JogoHobbes(jogos_iia.Game):
 
     def terminal_test(self, state):
         """metodo booleano que verifica se um estado dado eh final."""
-        # TODO
+        # TODO:
         return
 
 

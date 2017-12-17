@@ -1,10 +1,10 @@
-import jogos_iia.py
+import jogos_iia
 
 table_size = 5
 
-class JogoPeoes(jogos_iia.Game) :
+class JogoHobbes(jogos_iia.Game):
 
-    def __init__(game, state, nivel = 0):
+    def __init__(self,game, state, nivel = 0):
         """O construtor."""
         # TODO:
 
@@ -13,10 +13,13 @@ class JogoPeoes(jogos_iia.Game) :
     def actions(self, state):
         """Obtencao das jogadas possiveis, dado um estado do jogo."""
         # TODO:
+        result = []
+        tabuleiro = state.board.tabuleiro
+        first_steps = self.first_step(tabuleiro)
+        for (x,y) in first_steps:
+            result = result + self.second_step((x,y),tabuleiro)
 
-
-        
-        return
+        return result
 
     def result(self,state, move):
         """Obtencao do estado que se obtem ao executar uma dada jogada num dado estado."""
@@ -31,7 +34,7 @@ class JogoPeoes(jogos_iia.Game) :
 
     def terminal_test(self, state):
         """metodo booleano que verifica se um estado dado eh final."""
-        # TODO:
+        # TODO
         return
 
 
@@ -40,7 +43,7 @@ class JogoPeoes(jogos_iia.Game) :
 
         dicLinhas = {1 : '5', 2 : '4', 3 : '3', 4 : '2', 5 : '1'}
         dicColunas = {1 : 'a', 2 : 'b', 3 : 'c', 4 : 'd', 5 : 'e'}
-        board = state.board.tabuleiro
+        board = state.board.tabuleiro #FIXME: para poderes fazer isto tens de "criar" a estrutura Board, tal como o stor faz com o GameState
         print("Tabuleiro actual:")
         for x in range(1, 6):
             for y in range(1, 6):
@@ -55,7 +58,8 @@ class JogoPeoes(jogos_iia.Game) :
                     print('   |')
                     
             print('------------------------') # 4 traços x 6 vezes = 24 traços
-        print('     ' + dicColunas[1] + '   ' + dicColunas[2] + '   ' + dicColunas[3] + '   ' + dicColunas[4] + '   ' + dicColunas[5])
+        print('     ' + dicColunas[1] + '   ' + dicColunas[2] + '   ' + dicColunas[3] + '   ' + dicColunas[4] + '   ' + dicColunas[5])# FIXME: 
+                                                                                                                                      # faz com um for, se for para fazer assim nao precisavas do dicionario neh?
         
         #FIXME:
         #if self.terminal_test(state) :
@@ -65,11 +69,18 @@ class JogoPeoes(jogos_iia.Game) :
         
 
     def first_step(self, tabuleiro): #TODO:
+        stepped = {}
+        for coluna in range (1,table_size):
+            for linha in range (1, table_size):
+                stepped[(coluna,linha)] = False
 
-        for i in range (1,table_size):
-            for j in range (1, table_size):
-
-        return first_step_rec(tabuleiro,stepped)
-
+        return self.first_step_rec(tabuleiro,stepped)
 
     def first_step_rec(self, tabuleiro, stepped): # TODO:
+
+        return
+
+    def second_step(self, tabuleiro, pos):
+
+        return
+        

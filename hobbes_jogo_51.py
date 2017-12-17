@@ -7,7 +7,8 @@ class JogoHobbes(jogos_iia.Game):
     def __init__(self):
         """O construtor."""
 
-        self.jogadores = ('rei preto','rei branco')      
+        self.jogadores = ('rei preto','rei branco')
+        self.pecas = {'rei preto':'p', 'rei branco':'b'}      
         self.size = 5
         tabuleiro_inicial = {(2, 1): ’n’, (2, 2): ’n’, (2, 4): ’n’, (2, 5): ’n’,
                              (3, 1): ’p’, (3, 2): ’n’, (3, 4): ’n’, (3, 5): ’b’,
@@ -30,9 +31,10 @@ class JogoHobbes(jogos_iia.Game):
         
         i = 0
         pos = posicoes[i]
-        while (tabuleiro[pos] != '' ):
-
-        rei
+        while (tabuleiro[pos] != self.pecas[state.to_move]):
+            pos = posicoes[i]
+            i += 1
+        rei = pos
         first_steps = self.first_step(tabuleiro, rei)
         for pos in first_steps:
             result = result + self.second_step(pos,tabuleiro)
@@ -61,8 +63,8 @@ class JogoHobbes(jogos_iia.Game):
         dicColunas = {1 : 'a', 2 : 'b', 3 : 'c', 4 : 'd', 5 : 'e'}
         board = state.board.tabuleiro #FIXME: para poderes fazer isto tens de "criar" a estrutura Board, tal como o stor faz com o GameState
         print("Tabuleiro actual:")
-        for x in range(1, 6):
-            for y in range(1, 6):
+        for x in range(1, self.size + 1):
+            for y in range(1, self.size + 1):
                 if y == 1:
                     print(dicLinhas[x] + '  |')
                 if (y,x) in board['b']:

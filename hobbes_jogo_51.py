@@ -4,15 +4,17 @@ table_size = 5
 
 class JogoHobbes(jogos_iia.Game):
 
+    Board = namedtuple('Board', 'jogadas, tabuleiro')
+
     def __init__(self):
         """O construtor."""
 
         self.jogadores = ('rei preto','rei branco')
         self.pecas = {'rei preto':'p', 'rei branco':'b'}      
         self.size = 5
-        tabuleiro_inicial = {(2, 1): ’n’, (2, 2): ’n’, (2, 4): ’n’, (2, 5): ’n’,
-                             (3, 1): ’p’, (3, 2): ’n’, (3, 4): ’n’, (3, 5): ’b’,
-                             (4, 1): ’n’, (4, 2): ’n’, (4, 4): ’n’, (4, 5): ’n’}
+        tabuleiro_inicial = {(2, 1): 'n', (2, 2): 'n', (2, 4): 'n', (2, 5): 'n',
+                             (3, 1): 'p', (3, 2): 'n', (3, 4): 'n', (3, 5): 'b',
+                             (4, 1): 'n', (4, 2): 'n', (4, 4): 'n', (4, 5): 'n'}
         
         movimentos_iniciais = [((3,1),(2,1)),((3,1),(3,2)),((3,1),(4,1))]
 
@@ -49,11 +51,27 @@ class JogoHobbes(jogos_iia.Game):
         """Calculo da utilidade de um estado na perspectiva de um dado jogador.
         Devera ter o valor 1, para o caso de vitoria, ou −1, para o caso de derrota."""
         # TODO:
+        
         return
 
     def terminal_test(self, state):
         """metodo booleano que verifica se um estado dado eh final."""
         # TODO:
+        jogadas = state.board[0]
+        tab = state.board[1]
+        if not self.action(state) or jogadas == 50:
+            return true
+        else:
+            search = (0,0,0)
+            for x in range (1, self.size):
+                for y in range (x, self.size):
+                    if state.initial.board[(x,y)] in ('p', 'b') :
+                        if search == (0,0):
+                            search = (x, y)
+                        else:
+                            search = (mod(search[0] - x), mod(search[1] - y)
+                            if search[0] == 0 and search[1] <= 1
+                    
         return
 
     def display(self, state): #FIXME:
@@ -99,3 +117,6 @@ class JogoHobbes(jogos_iia.Game):
     def second_step(self, tabuleiro, pos):
 
         return
+
+
+    def findPlayer(self, state): #TODO:

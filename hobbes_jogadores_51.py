@@ -6,8 +6,8 @@ import hobbes_jogo
 # ver peoes_jogadores para exemplo -- SEM BOTAR
 
 
-def f_aval_hobbes_F1(estado,jogador) :
-     #TODO:
+def f_aval_hobbes_F1(estado,jogador):
+    #TODO:
     return 
 
 def jogador_hobbes_F1(jogo,estado, nivel = 5) : #FIXME:

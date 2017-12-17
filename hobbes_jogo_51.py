@@ -7,8 +7,7 @@ class JogoHobbes(jogos_iia.Game):
     def __init__(self,game, state, nivel = 0):
         """O construtor."""
         # TODO:
-
-        return 
+        return
 
     def actions(self, state):
         """Obtencao das jogadas possiveis, dado um estado do jogo."""
@@ -16,9 +15,8 @@ class JogoHobbes(jogos_iia.Game):
         result = []
         tabuleiro = state.board.tabuleiro
         first_steps = self.first_step(tabuleiro)
-        for (x,y) in first_steps:
-            result = result + self.second_step((x,y),tabuleiro)
-
+        for pos in first_steps:
+            result = result + self.second_step(pos,tabuleiro)
         return result
 
     def result(self,state, move):
@@ -49,18 +47,16 @@ class JogoHobbes(jogos_iia.Game):
             for y in range(1, 6):
                 if y == 1:
                     print(dicLinhas[x] + '  |')
-                
-                if (y,x) in board['b'] :
+                if (y,x) in board['b']:
                     print(' b |')
-                elif (y,x) in board['p'] :
+                elif (y,x) in board['p']:
                     print(' p |')
-                else :
+                else:
                     print('   |')
                     
             print('------------------------') # 4 traços x 6 vezes = 24 traços
         print('     ' + dicColunas[1] + '   ' + dicColunas[2] + '   ' + dicColunas[3] + '   ' + dicColunas[4] + '   ' + dicColunas[5])# FIXME: 
-                                                                                                                                      # faz com um for, se for para fazer assim nao precisavas do dicionario neh?
-        
+                                                                                                                                      # faz com um for, se for para fazer assim nao precisavas do dicionario neh?     
         #FIXME:
         #if self.terminal_test(state) :
         #   print("FIM do Jogo")
@@ -70,17 +66,16 @@ class JogoHobbes(jogos_iia.Game):
 
     def first_step(self, tabuleiro): #TODO:
         stepped = {}
-        for coluna in range (1,table_size):
-            for linha in range (1, table_size):
-                stepped[(coluna,linha)] = False
+        for coluna in range(1, table_size):
+            for linha in range(1, table_size):
+                stepped[(coluna, linha)] = False
 
-        return self.first_step_rec(tabuleiro,stepped)
+        return self.first_step_rec(tabuleiro, stepped)
 
     def first_step_rec(self, tabuleiro, stepped): # TODO:
-
+        
         return
 
     def second_step(self, tabuleiro, pos):
 
         return
-        

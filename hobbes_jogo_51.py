@@ -66,13 +66,13 @@ class JogoHobbes(jogos_iia.Game):
         for x in range(1, self.size + 1):
             for y in range(1, self.size + 1):
                 if y == 1:
-                    print(dicLinhas[x] + '  |')
+                    print(dicLinhas[x], end = '  |')
                 if (y,x) in board['b']:
-                    print(' b |')
+                    print(' b', end = ' |')
                 elif (y,x) in board['p']:
-                    print(' p |')
+                    print(' p', end = ' |')
                 else:
-                    print('   |')
+                    print('  ', end = ' |')
                     
             print('------------------------') # 4 traços x 6 vezes = 24 traços
         print('     ' + dicColunas[1] + '   ' + dicColunas[2] + '   ' + dicColunas[3] + '   ' + dicColunas[4] + '   ' + dicColunas[5])# FIXME: 

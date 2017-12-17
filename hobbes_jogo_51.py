@@ -56,7 +56,7 @@ class JogoHobbes(jogos_iia.Game):
 
     def terminal_test(self, state):
         """metodo booleano que verifica se um estado dado eh final."""
-        # TODO:
+        # FIXME:
         jogadas = state.board[0]
         tab = state.board[1]
         if not self.action(state) or jogadas == 50:

@@ -79,7 +79,7 @@ class JogoHobbes(jogos_iia.Game):
         Devera ter o valor 1, para o caso de vitoria, ou −1, para o caso de derrota."""
         search = 0
         pecas = state.board.tabuleiro.keys()
-        for x in range(0, len(pecas) - 1):
+        for x in pecas:
             if pecas[x] in ('p', 'b'):
                 if pecas[x] == self.pecas[player]:
                     search += 1

@@ -92,8 +92,7 @@ class JogoHobbes(jogos_iia.Game):
                             search = (x, y)
                         else:
                             (col,lin) = search
-                            search = (abs(col - x), abs(lin - y)) # FIXME: podemos usar pathern matching, em vez de search[0] -
-                                                                              # (col,lin) = search
+                            search = (abs(col - x), abs(lin - y))
                             if (col == 0 and lin <= 1) or (col <= 0 and lin == 1):
                                 return True
             return False

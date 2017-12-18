@@ -10,7 +10,7 @@ class JogoHobbes(jogos_iia.Game):
         """O construtor."""
 
         self.jogadores = ('rei preto', 'rei branco')
-        self.pecas = {'rei preto':'p', 'rei branco':'b'} #FIXME: nao faltam as neutras?
+        self.pecas = {'rei preto':'p', 'rei branco':'b', 'neutras':'n'}
         self.size = 5
         tabuleiro_inicial = {(2, 1): 'n', (2, 2): 'n', (2, 4): 'n', (2, 5): 'n',
                              (3, 1): 'p', (3, 2): 'n', (3, 4): 'n', (3, 5): 'b',
@@ -75,27 +75,19 @@ class JogoHobbes(jogos_iia.Game):
     def utility(self, state, player):
         """Calculo da utilidade de um estado na perspectiva de um dado jogador.
         Devera ter o valor 1, para o caso de vitoria, ou −1, para o caso de derrota."""
-        # TODO:
+        search = 0
+        pecas = state.board.tabuleiro.keys()
+        for x in range(0, len(pecas) - 1):
+            if pecas[x] in ('p', 'b'):
+                if pecas[x] == self.pecas[player]:
+                    search += 1
+                else:
+                    search -= 1
+        return search
 
-        return
 
     def terminal_test(self, state):
-        """metodo booleano que verifica se um estado dado eh final."""
-        if not self.actions(state) or state.board[0] >= 50: #ou não há mais açoes ou ja se chegou ao limite de jogadas
-            return True
-        else: # se fazes return o que eh que este else esta aqui a fazer? quando ainda podiam haver jogadas, mas um rei ja estao ao lado do outro
-            search = (0, 0)
-            for x in range(1, self.size + 1):
-                for y in range(x, self.size + 1):
-                    if state.board[(x, y)] in ('p', 'b'):
-                        if search == (0, 0):
-                            search = (x, y)
-                        else:
-                            (col,lin) = search
-                            search = (abs(col - x), abs(lin - y))
-                            if (col == 0 and lin <= 1) or (col <= 0 and lin == 1):
-                                return True
-            return False
+        return utility(state, 'rei branco') != 0 or board.jogadas == 50
 
     def display(self, state): #FIXME:
         """Mostra uma representacao de um estado do jogo."""

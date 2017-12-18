@@ -112,8 +112,6 @@ class JogoHobbes(jogos_iia.Game):
 
             print('------------------------') # 4 traços x 6 vezes = 24 traços
         print('     A    B   C   D    E')
-        # FIXME: better??
-        # faz com um for, se for para fazer assim nao precisavas do dicionario neh?
 
         #FIXME: isto esta comentado porque?
         #if self.terminal_test(state) :

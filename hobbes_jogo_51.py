@@ -102,7 +102,7 @@ class JogoHobbes(jogos_iia.Game):
         """Mostra uma representacao de um estado do jogo."""
 
         dicLinhas = {1 : '5', 2 : '4', 3 : '3', 4 : '2', 5 : '1'}
-        dicColunas = {1 : 'a', 2 : 'b', 3 : 'c', 4 : 'd', 5 : 'e'}
+
         board = state.board.tabuleiro
         print("Tabuleiro actual:")
         for x in range(1, self.size + 1):
@@ -117,8 +117,8 @@ class JogoHobbes(jogos_iia.Game):
                     print('  ', end=' |')
 
             print('------------------------') # 4 traços x 6 vezes = 24 traços
-        print('     ' + dicColunas[1] + '   ' + dicColunas[2] + '   ' + dicColunas[3] + '   ' + dicColunas[4] + '   ' + dicColunas[5])
-        # FIXME:  NISCO isto continua igual
+        print('     A    B   C   D    E')
+        # FIXME: better??
         # faz com um for, se for para fazer assim nao precisavas do dicionario neh?
 
         #FIXME: isto esta comentado porque?

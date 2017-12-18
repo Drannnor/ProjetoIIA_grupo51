@@ -30,10 +30,11 @@ class JogoHobbes(jogos_iia.Game):
             for linha in range(1, self.size + 1):
                 stepped[(coluna, linha)] = False
 
-        return self.first_step_rec(tabuleiro, stepped)
+        return self.first_step_rec(tabuleiro, stepped, pos_real)
 
-    def first_step_rec(self, tabuleiro, stepped): # TODO:
-
+    def first_step_rec(self, tabuleiro, stepped, pos): # TODO:
+        (x, y) = pos
+        
         return
 
     def second_step(self, tabuleiro, pos):
@@ -62,6 +63,7 @@ class JogoHobbes(jogos_iia.Game):
         tabuleiro = state.board.tabuleiro
 
         rei = self.find_player(state)
+
         first_steps = self.first_step(tabuleiro, rei)
         for pos in first_steps:
             result = result + self.second_step(pos, tabuleiro)
@@ -88,6 +90,7 @@ class JogoHobbes(jogos_iia.Game):
 
     def terminal_test(self, state):
         return utility(state, 'rei branco') != 0 or board.jogadas == 50
+
 
     def display(self, state): #FIXME:
         """Mostra uma representacao de um estado do jogo."""

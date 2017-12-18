@@ -10,7 +10,7 @@ class JogoHobbes(jogos_iia.Game):
         """O construtor."""
 
         self.jogadores = ('rei preto', 'rei branco')
-        self.pecas = {'rei preto':'p', 'rei branco':'b'}
+        self.pecas = {'rei preto':'p', 'rei branco':'b'} #FIXME: nao faltam as neutras?
         self.size = 5
         tabuleiro_inicial = {(2, 1): 'n', (2, 2): 'n', (2, 4): 'n', (2, 5): 'n',
                              (3, 1): 'p', (3, 2): 'n', (3, 4): 'n', (3, 5): 'b',
@@ -81,22 +81,20 @@ class JogoHobbes(jogos_iia.Game):
 
     def terminal_test(self, state):
         """metodo booleano que verifica se um estado dado eh final."""
-        # FIXME: Diogo: challenge time! consegues fazer isto sem 7, 7 layers de indentacao?
-        jogadas = state.board[0]
-        tab = state.board[1] # FIXME: temos um namedtuple Board para isto
-        if not self.actions(state) or jogadas >= 50:
+        if not self.actions(state) or state.board[0] >= 50: #ou não há mais açoes ou ja se chegou ao limite de jogadas
             return True
-        else: # se fazes return o que eh que este else esta aqui a fazer?
-            search = (0, 0, 0) # FIXME: o que ser a ultima coordenada? e porque eh que so aparece aqui
+        else: # se fazes return o que eh que este else esta aqui a fazer? quando ainda podiam haver jogadas, mas um rei ja estao ao lado do outro
+            search = (0, 0)
             for x in range(1, self.size + 1):
                 for y in range(x, self.size + 1):
-                    if state.initial.board[(x, y)] in ('p', 'b'): # FIXME: initial board?
+                    if state.board[(x, y)] in ('p', 'b'):
                         if search == (0, 0):
                             search = (x, y)
                         else:
-                            search = (mod(search[0] - x), mod(search[1] - y)) # FIXME: podemos usar pathern matching, em vez de search[0] -
-                                                                              # (col,lin) = search, falta o import para poderes usar o mod
-                            if (search[0] == 0 and search[1] <= 1) or (search[0] <= 0 and search[1] == 1):
+                            (col,lin) = search
+                            search = (abs(col - x), abs(lin - y)) # FIXME: podemos usar pathern matching, em vez de search[0] -
+                                                                              # (col,lin) = search
+                            if (col == 0 and lin <= 1) or (col <= 0 and lin == 1):
                                 return True
             return False
 
@@ -111,7 +109,7 @@ class JogoHobbes(jogos_iia.Game):
             for y in range(1, self.size + 1):
                 if y == 1:
                     print(dicLinhas[x], end='  |')
-                if (y, x) in board['b']:
+                elif (y, x) in board['b']:
                     print(' b', end=' |')
                 elif (y, x) in board['p']:
                     print(' p', end=' |')

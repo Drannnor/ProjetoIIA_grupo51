@@ -30,10 +30,11 @@ class JogoHobbes(jogos_iia.Game):
             for linha in range(1, self.size + 1):
                 stepped[(coluna, linha)] = False
 
-        return self.first_step_rec(tabuleiro, stepped)
+        return self.first_step_rec(tabuleiro, stepped, pos_real)
 
-    def first_step_rec(self, tabuleiro, stepped): # TODO:
-
+    def first_step_rec(self, tabuleiro, stepped, pos): # TODO:
+        (x, y) = pos
+        
         return
 
     def second_step(self, tabuleiro, pos):
@@ -62,6 +63,7 @@ class JogoHobbes(jogos_iia.Game):
         tabuleiro = state.board.tabuleiro
 
         rei = self.find_player(state)
+
         first_steps = self.first_step(tabuleiro, rei)
         for pos in first_steps:
             result = result + self.second_step(pos, tabuleiro)
@@ -86,7 +88,7 @@ class JogoHobbes(jogos_iia.Game):
         tab = state.board[1] # FIXME: temos um namedtuple Board para isto
         if not self.actions(state) or jogadas >= 50:
             return True
-        else: # se fazes return o que eh que este else esta aqui a fazer?
+        else: # FIXME: se fazes return o que eh que este else esta aqui a fazer?
             search = (0, 0, 0) # FIXME: o que ser a ultima coordenada? e porque eh que so aparece aqui
             for x in range(1, self.size + 1):
                 for y in range(x, self.size + 1):

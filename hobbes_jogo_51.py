@@ -18,10 +18,10 @@ class JogoHobbes(jogos_iia.Game):
 
         movimentos_iniciais = [((3, 1), (2, 1)), ((3, 1), (3, 2)), ((3, 1), (4, 1))]
 
-        self.initial = jogos_iia.GameState(
+        self.state = jogos_iia.GameState(
             to_move=self.jogadores[0],
             utility=0,
-            board=tabuleiro_inicial,
+            board=(0,tabuleiro_inicial),
             moves=movimentos_iniciais)
 
     def first_step(self, tabuleiro, pos_real): #TODO:
@@ -89,7 +89,7 @@ class JogoHobbes(jogos_iia.Game):
 
 
     def terminal_test(self, state):
-        return utility(state, 'rei branco') != 0 or board.jogadas == 50
+        return self.utility(state, 'rei branco') != 0 or state.board.jogadas == 50
 
 
     def display(self, state): #FIXME:

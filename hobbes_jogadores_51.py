@@ -9,7 +9,6 @@ import hobbes_jogo_51
 def f_aval_hobbes_F1(state, jogador):
     return len(state.moves)
 
-
 # TODO:
 def f_aval_hobbes_F2(state, jogador):
     acts = actions(state)

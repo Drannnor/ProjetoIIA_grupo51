@@ -76,7 +76,6 @@ class JogoHobbes(jogos_iia.Game):
         if tabuleiro[(x + 1, y)] == self.pecas[other_player(player)]
             return 
 
-
         return self.second_step_direction(tabuleiro, pos_ini, (1, 0))  +\
                self.second_step_direction(tabuleiro, pos_ini, (0, 1))  +\
                self.second_step_direction(tabuleiro, pos_ini, (-1, 0)) +\

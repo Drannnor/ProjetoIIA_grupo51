@@ -3,6 +3,7 @@ import jogos_iia
 import hobbes_jogo_51
 
 MAXNORM = 10
+MAXSIDES = 4
 
 
 
@@ -10,11 +11,11 @@ MAXNORM = 10
 # Jogadores alfabeta para o jogo hobbes (com funções de avaliação)
 # ver peoes_jogadores para exemplo -- SEM BOTAR
 
-# quanto mais acoes tem, melhor é, heuristica 1
+# quanto mais acoes tem, melhor é; heuristica 1
 def f_aval_hobbes_F1(state, jogador):
     return len(state.moves)
 
-# quanto menor a distanciaentrea posicao do outro jogador e a possivel posicao do jogador atual, melhor é, heuristica 2
+# quanto menor a distanciaentrea posicao do outro jogador e a possivel posicao do jogador atual, melhor é; heuristica 2
 def f_aval_hobbes_F2(state, jogador):
     acts = state.moves
     (x,y) = find_player(state, 'p' if (jogador == 'b') else 'b')
@@ -25,14 +26,24 @@ def f_aval_hobbes_F2(state, jogador):
         min = norm if norm < min else min
     return MAXNORM - min
 
-#quantos mais espaços livres adjacentes tem, melhor é, heuristica 3
+#quantos mais espaços livres adjacentes tem, por acoes disponiveis, melhor é; heuristica 3
 def f_aval_hobbes_F3(state, jogador):
     (x,y) = find_player(state, 'b' if (jogador == 'b') else 'p')
-    for i in range (1, size):
-        for j in range (1, size):
-        state.board.tabuleiro[(x,y)] == none and
+    tab = state.board.tabuleiro
+    sum = 0 # lados livres
+    for i in range 4:
+        if x-1 > 0 and tab[(x,y)] == none
+            sum += 1
+        if x+1 <= BOARDSIZE and tab[(x+1,y)] == none
+            sum += 1
+        if y-1 > 0 and tab[(x,y-1)] == none
+            sum += 1
+        if y+1 <=  BOARDSIZE and tab[(x,y)] == none
+            sum += 1
+         
+    h1 = f_aval_hobbes_F1(state, jogador)
 
-    return
+    return h1/(MAXSIDES - sum + 1) // menor divisor, melhor
 
 
 # TODO:

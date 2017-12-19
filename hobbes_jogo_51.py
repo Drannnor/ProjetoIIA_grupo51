@@ -3,6 +3,19 @@ import jogos_iia
 
 Board = namedtuple('Board', 'jogadas, tabuleiro')
 
+
+def find_player(state, player):
+    tabuleiro = state.board.tabuleiro
+    posicoes = tabuleiro.keys()
+
+    i = 0
+    pos = posicoes[i]
+    while tabuleiro[pos] != player:
+        pos = posicoes[i]
+        i += 1
+
+    return pos
+
 class JogoHobbes(jogos_iia.Game):
 
 
@@ -35,46 +48,46 @@ class JogoHobbes(jogos_iia.Game):
     def first_step_rec(self, tabuleiro, stepped, pos, player):
         (x, y) = pos
         ocup = tabuleiro[pos]
-        
+
         if ocup == self.pecas['neutras'] and ocup != player and stepped[pos]:
             return []
 
         stepped[pos] = True
-        return [pos] + self.first_step_rec(tabuleiro,stepped, (x + 1, y), player) + \
-                       self.first_step_rec(tabuleiro,stepped, (x, y + 1), player) + \
-                       self.first_step_rec(tabuleiro,stepped, (x - 1, y), player) + \
-                       self.first_step_rec(tabuleiro,stepped, (x, y - 1), player)
+        return [pos] + self.first_step_rec(tabuleiro, stepped, (x + 1, y), player) +\
+                       self.first_step_rec(tabuleiro, stepped, (x, y + 1), player) +\
+                       self.first_step_rec(tabuleiro, stepped, (x - 1, y), player) +\
+                       self.first_step_rec(tabuleiro, stepped, (x, y - 1), player)
 
-    def second_step(self, tabuleiro, pos):
+    def second_step_direction(self,tabuleiro, pos, dir):
 
-        return
+        result = []
+        (posx, posy) = pos
+        (dirx, diry) = dir
+        curr_pos = pos
+        while 
+        
 
 
-    def find_player(self, state): # maybe TODO: serah preciso a funcao receber o nome do player,
-                                  # caso seja necessario descobrir a posicao do outro jogado
-        tabuleiro = state.board.tabuleiro
-        posicoes = tabuleiro.keys()
+    def second_step(self, tabuleiro, pos_ini):
+        (x, y) = pos_ini
 
-        i = 0
-        pos = posicoes[i]
-        while tabuleiro[pos] != self.pecas[state.to_move]:
-            pos = posicoes[i]
-            i += 1
-
-        return pos
-
+        return self.second_step_direction(tabuleiro, pos_ini, (1, 0))  +\
+               self.second_step_direction(tabuleiro, pos_ini, (0, 1))  +\
+               self.second_step_direction(tabuleiro, pos_ini, (-1, 0)) +\
+               self.second_step_direction(tabuleiro, pos_ini, (0, -1)) 
 
     def actions(self, state):
         """Obtencao das jogadas possiveis, dado um estado do jogo."""
-        # TODO:
+
         result = []
         tabuleiro = state.board.tabuleiro
 
-        pos_real = self.find_player(state)
+        pos_real = find_player(state, self.pecas[state.to_move])
 
         first_steps = self.first_step(tabuleiro, pos_real, state.to_move)
         for pos in first_steps:
             result = result + self.second_step(pos, tabuleiro)
+
         return result
 
     def result(self, state, move):
@@ -86,10 +99,10 @@ class JogoHobbes(jogos_iia.Game):
         """Calculo da utilidade de um estado na perspectiva de um dado jogador.
         Devera ter o valor 1, para o caso de vitoria, ou −1, para o caso de derrota."""
         search = 0
-        pecas = state.board.tabuleiro.keys()
+        pecas = state.board.tabuleiro.keys() # FIXME: 
         for curr in pecas:
             if pecas[curr] in ('p', 'b'):
-               search += 1 if pecas[curr] == self.pecas[player] else -1
+                search += 1 if pecas[curr] == self.pecas[player] else -1
         return search
 
     def terminal_test(self, state):
@@ -121,4 +134,4 @@ class JogoHobbes(jogos_iia.Game):
         #if self.terminal_test(state) :
         #   print("FIM do Jogo")
         #else :
-        #    print("Próximo jogador:{}\n".format(state.to_move))
+        #    print("Próximo jogador:{}\n".format(state.to_move)

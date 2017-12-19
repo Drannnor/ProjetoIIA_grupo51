@@ -1,10 +1,10 @@
 from collections import namedtuple
 import jogos_iia
 
+Board = namedtuple('Board', 'jogadas, tabuleiro')
 
 class JogoHobbes(jogos_iia.Game):
 
-    Board = namedtuple('Board', 'jogadas, tabuleiro')
 
     def __init__(self):
         """O construtor."""
@@ -21,21 +21,29 @@ class JogoHobbes(jogos_iia.Game):
         self.state = jogos_iia.GameState(
             to_move=self.jogadores[0],
             utility=0,
-            board=(0,tabuleiro_inicial),
+            board=Board(0,tabuleiro_inicial),
             moves=movimentos_iniciais)
 
-    def first_step(self, tabuleiro, pos_real): #TODO:
+    def first_step(self, tabuleiro, pos_real, player):
         stepped = {}
         for coluna in range(1, self.size + 1):
             for linha in range(1, self.size + 1):
                 stepped[(coluna, linha)] = False
 
-        return self.first_step_rec(tabuleiro, stepped, pos_real)
+        return self.first_step_rec(tabuleiro, stepped, pos_real, player)
 
-    def first_step_rec(self, tabuleiro, stepped, pos): # TODO:
+    def first_step_rec(self, tabuleiro, stepped, pos, player):
         (x, y) = pos
+        ocup = tabuleiro[pos]
         
-        return
+        if ocup == self.pecas['neutras'] and ocup != player and stepped[pos]:
+            return []
+
+        stepped[pos] = True
+        return [pos] + self.first_step_rec(tabuleiro,stepped, (x + 1, y), player) + \
+                       self.first_step_rec(tabuleiro,stepped, (x, y + 1), player) + \
+                       self.first_step_rec(tabuleiro,stepped, (x - 1, y), player) + \
+                       self.first_step_rec(tabuleiro,stepped, (x, y - 1), player)
 
     def second_step(self, tabuleiro, pos):
 
@@ -62,16 +70,16 @@ class JogoHobbes(jogos_iia.Game):
         result = []
         tabuleiro = state.board.tabuleiro
 
-        rei = self.find_player(state)
+        pos_real = self.find_player(state)
 
-        first_steps = self.first_step(tabuleiro, rei)
+        first_steps = self.first_step(tabuleiro, pos_real, state.to_move)
         for pos in first_steps:
             result = result + self.second_step(pos, tabuleiro)
         return result
 
     def result(self, state, move):
         """Obtencao do estado que se obtem ao executar uma dada jogada num dado estado."""
-        # TODO:
+        # TODO: pelo Nisco
         return
 
     def utility(self, state, player):
@@ -79,14 +87,10 @@ class JogoHobbes(jogos_iia.Game):
         Devera ter o valor 1, para o caso de vitoria, ou −1, para o caso de derrota."""
         search = 0
         pecas = state.board.tabuleiro.keys()
-        for x in pecas:
-            if pecas[x] in ('p', 'b'):
-                if pecas[x] == self.pecas[player]:
-                    search += 1
-                else:
-                    search -= 1
+        for curr in pecas:
+            if pecas[curr] in ('p', 'b'):
+               search += 1 if pecas[curr] == self.pecas[player] else -1
         return search
-
 
     def terminal_test(self, state):
         return self.utility(state, 'rei branco') != 0 or state.board.jogadas == 50

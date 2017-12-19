@@ -7,7 +7,7 @@ import hobbes_jogo_51
 
 # quanto mais jogadas tem, mais pontos tem, heuristica 1
 def f_aval_hobbes_F1(estado, jogador):
-    return len(hobbes_jogo_51.actions(estado)) #FIXME: hobbes_jogo_51 eh o ficheiro nao a classe
+    return len(estado.moves)
 
 
 # TODO:

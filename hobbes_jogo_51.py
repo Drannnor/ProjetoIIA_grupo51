@@ -21,7 +21,6 @@ def other_player(player):
 
 class JogoHobbes(jogos_iia.Game):
 
-
     def __init__(self):
         """O construtor."""
 
@@ -76,7 +75,6 @@ class JogoHobbes(jogos_iia.Game):
         if tabuleiro[(x + 1, y)] == self.pecas[other_player(player)]
             return 
 
-
         return self.second_step_direction(tabuleiro, pos_ini, (1, 0))  +\
                self.second_step_direction(tabuleiro, pos_ini, (0, 1))  +\
                self.second_step_direction(tabuleiro, pos_ini, (-1, 0)) +\
@@ -110,8 +108,7 @@ class JogoHobbes(jogos_iia.Game):
         if(Vy == 0): #andou na horizontal
             if(Vx > 0):#andou para a direita
                 if(old_tabuleiro[(x1 + 1,y1)] == other_player(pos_jogador)):
-                    new_tabuleiro[(x1 + 1,y1)] = pos_jogador
-                    
+                    new_tabuleiro[(x1 + 1,y1)] = pos_jogador  
                 elif(old_tabuleiro[(x1 + 1,y1)] == 'n'):
                     pos_neut_old = (x1 + 1,y1)
                     new_tabuleiro[(x2,y2)] = pos_jogador
@@ -119,8 +116,8 @@ class JogoHobbes(jogos_iia.Game):
                 else:
                     pos_neut_old = (x1 - 1,y1)
                     new_tabuleiro[(x2,y2)] = pos_jogador
-                    new_tabuleiro[(x2 - 1,y2)] = 'n'
-                    
+                    new_tabuleiro[(x2 - 1,y2)] = 'n'  
+
             else:# andou para a esquerda
                 if(old_tabuleiro[(x1 - 1,y1)] == other_player(pos_jogador)):
                     new_tabuleiro[(x1 - 1,y1)] = pos_jogador
@@ -133,7 +130,7 @@ class JogoHobbes(jogos_iia.Game):
                     pos_neut_old = (x1 + 1,y1)
                     new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2 + 1,y2)] = 'n'
-                 
+
         else: #andou na vertical
             if(Vy > 0):#andou para cima
                 if(old_tabuleiro[(x1,y1 + 1)] == other_player(pos_jogador)):
@@ -168,18 +165,17 @@ class JogoHobbes(jogos_iia.Game):
 
         result = jogos_iia.GameState(
             to_move = other_player(state.to_move),
-            utility = self.calcular_utilidade(new_tabuleiro,player), #FIXME: TODO:
+            utility = self.calcular_utilidade(new_tabuleiro,other_player(player)), #FIXME: TODO:
             board = (state.board[0] + 1, new_tabuleiro),
             moves = self.possible_moves(new_tabuleiro, other_player(player))) #TODO:
-        
-        
+
         return result
 
     def utility(self, state, player):
         """Calculo da utilidade de um estado na perspectiva de um dado jogador.
         Devera ter o valor 1, para o caso de vitoria, ou −1, para o caso de derrota."""
         search = 0
-        pecas = state.board.tabuleiro.keys() # FIXME: 
+        pecas = state.board.tabuleiro.keys() # FIXME: DIOOOOGOOOOOO!!!!
         for curr in pecas:
             if pecas[curr] in ('p', 'b'):
                 search += 1 if pecas[curr] == self.pecas[player] else -1
@@ -187,7 +183,6 @@ class JogoHobbes(jogos_iia.Game):
 
     def terminal_test(self, state):
         return self.utility(state, 'rei branco') != 0 or state.board.jogadas == 50
-
 
     def display(self, state): #FIXME:
         """Mostra uma representacao de um estado do jogo."""

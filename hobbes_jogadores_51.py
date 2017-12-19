@@ -5,8 +5,6 @@ import hobbes_jogo_51
 MAXNORM = 10
 MAXSIDES = 4
 
-
-
 # TODO:
 # Jogadores alfabeta para o jogo hobbes (com funções de avaliação)
 # ver peoes_jogadores para exemplo -- SEM BOTAR

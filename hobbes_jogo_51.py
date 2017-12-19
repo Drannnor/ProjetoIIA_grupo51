@@ -166,15 +166,15 @@ class JogoHobbes(jogos_iia.Game):
 
         result = jogos_iia.GameState(
             to_move = other_player(state.to_move),
-            utility = self.calcular_utilidade(new_tabuleiro,other_player(player)), #FIXME: TODO:
+            utility = self.calcular_utilidade(new_tabuleiro,other_player(player)),
             board = (state.board[0] + 1, new_tabuleiro),
             moves = self.possible_moves(new_tabuleiro, other_player(player))) #TODO:
 
         return result
     
-    def calcular_utilidade(tabuleiro, moves, to_move, player):
+    def calcular_utilidade(self, tabuleiro, moves, to_move, player):
         res = 0
-        pcs = tabuleiro.keys()# FIXME: DIOOOOGOOOOOO!!!!
+        pcs = tabuleiro.keys()
         for curr in pecas:
             if pcs[curr] in ('p', 'b'):
                 res += 1 if pcs[curr] == self.pecas[player] else -1

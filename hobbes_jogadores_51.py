@@ -12,11 +12,20 @@ def f_aval_hobbes_F1(estado, jogador):
 
 # TODO:
 def f_aval_hobbes_F2(estado, jogador):
+    acts = actions(estado)
+    (x,y) = find_player(estado, 'b' if (jogador == 'b') else 'p')
+    
     return
 
 
 # TODO:
-def f_aval_hobbes_F3(estado, jogador):
+def f_aval_hobbes_F3(estado, jogador): #FIXME:
+    (x,y) = find_player(estado, 'b' if (jogador == 'b') else 'p')
+    for x in range (1, size):
+        for y in range (1, size):
+        estado.board.tabuleiro[(x,y)] == none and 
+    
+    
     return
 
 

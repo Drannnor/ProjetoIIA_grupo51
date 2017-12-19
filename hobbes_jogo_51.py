@@ -16,6 +16,9 @@ def find_player(state, player):
 
     return pos
 
+def other_player(player):
+    return "rei preto" if player == "rei branco" else "rei branco"
+
 class JogoHobbes(jogos_iia.Game):
 
 
@@ -36,7 +39,7 @@ class JogoHobbes(jogos_iia.Game):
             utility=0,
             board=Board(0,tabuleiro_inicial),
             moves=movimentos_iniciais)
-
+    
     def first_step(self, tabuleiro, pos_real, player):
         stepped = {}
         for coluna in range(1, self.size + 1):
@@ -65,12 +68,14 @@ class JogoHobbes(jogos_iia.Game):
         (dirx, diry) = dir
         curr_pos = pos
         if 
-        while 
-        
+        while
 
-
-    def second_step(self, tabuleiro, pos_ini):
+    def second_step(self, tabuleiro, pos_ini, player):
         (x, y) = pos_ini
+
+        if tabuleiro[(x + 1, y)] == self.pecas[other_player(player)]
+            return 
+
 
         return self.second_step_direction(tabuleiro, pos_ini, (1, 0))  +\
                self.second_step_direction(tabuleiro, pos_ini, (0, 1))  +\
@@ -87,7 +92,7 @@ class JogoHobbes(jogos_iia.Game):
 
         first_steps = self.first_step(tabuleiro, pos_real, state.to_move)
         for pos in first_steps:
-            result = result + self.second_step(pos, tabuleiro)
+            result += self.second_step(tabuleiro, pos, state.to_move)
 
         return result
 

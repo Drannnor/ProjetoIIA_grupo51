@@ -31,7 +31,7 @@ class JogoHobbes(jogos_iia.Game):
 
         movimentos_iniciais = [((3, 1), (2, 1)), ((3, 1), (3, 2)), ((3, 1), (4, 1))]
 
-        self.state = jogos_iia.GameState(
+        self.initial = jogos_iia.GameState(
             to_move=self.jogadores[0],
             utility=0,
             board=Board(0,tabuleiro_inicial),
@@ -64,6 +64,7 @@ class JogoHobbes(jogos_iia.Game):
         (posx, posy) = pos
         (dirx, diry) = dir
         curr_pos = pos
+        if 
         while 
         
 

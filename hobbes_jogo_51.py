@@ -76,6 +76,7 @@ class JogoHobbes(jogos_iia.Game):
         if tabuleiro[(x + 1, y)] == self.pecas[other_player(player)]
             return 
 
+
         return self.second_step_direction(tabuleiro, pos_ini, (1, 0))  +\
                self.second_step_direction(tabuleiro, pos_ini, (0, 1))  +\
                self.second_step_direction(tabuleiro, pos_ini, (-1, 0)) +\
@@ -98,7 +99,82 @@ class JogoHobbes(jogos_iia.Game):
     def result(self, state, move):
         """Obtencao do estado que se obtem ao executar uma dada jogada num dado estado."""
         # TODO: pelo Nisco
-        return
+        player = state.to_move
+        old_tabuleiro = state.board.tabuleiro
+        new_tabuleiro = {}
+        ((x1,y1),(x2,y2)) = move
+        jogador = find_player(state, self.pecas[player]) #FIXME: jogador => pos_jogador
+        posicao_antiga = old_tabuleiro[jogador]
+        
+        (Vx,Vy) = (x2-x1, y2-y1)
+        
+        if(Vy == 0): #andou na horizontal
+            if(Vx > 0):#andou para a direita
+                if(old_tabuleiro[(x1 + 1,y1)] == other_player(jogador)):
+                    new_tabuleiro[(x1 + 1,y1)] = jogador
+                    
+                elif(old_tabuleiro[(x1 + 1,y1)] == 'n'):
+                    pos_neut_old = (x1 + 1,y1)
+                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2 + 1,y2)] = 'n'
+                else:
+                    pos_neut_old = (x1 - 1,y1)
+                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2 - 1,y2)] = 'n'
+                    
+            else:
+                if(old_tabuleiro[(x1 - 1,y1)] == other_player(jogador)):
+                    new_tabuleiro[(x1 - 1,y1)] = jogador
+                    
+                elif(old_tabuleiro[(x1 - 1,y1)] == 'n'):
+                    pos_neut_old = (x1 - 1,y1)
+                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2 - 1,y2)] = 'n'
+                else:
+                    pos_neut_old = (x1 + 1,y1)
+                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2 + 1,y2)] = 'n'
+                 
+        else: #andou na vertical
+            if(Vy > 0):#andou para a direita
+                if(old_tabuleiro[(x1,y1 + 1)] == other_player(jogador)):
+                    new_tabuleiro[(x1,y1 + 1)] = jogador
+                    
+                elif(old_tabuleiro[(x1,y1 + 1)] == 'n'):
+                    pos_neut_old = (x1,y1 + 1)
+                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2 + 1)] = 'n'
+                else:
+                    pos_neut_old = (x1,y1 - 1)
+                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2 - 1)] = 'n'
+                    
+            else:
+                if(old_tabuleiro[(x1,y1 - 1)] == other_player(jogador)):
+                    new_tabuleiro[(x1,y1 - 1)] = jogador
+                    
+                elif(old_tabuleiro[(x1,y1 - 1)] == 'n'):
+                    pos_neut_old = (x1,y1 - 1)
+                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2 - 1)] = 'n'
+                else:
+                    pos_neut_old = (x1,y1 + 1)
+                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2 + 1)] = 'n'
+
+        board_key_list = old_tabuleiro.keys()
+        for pos in board_key_list:
+            if(pos != pos_neut_old AND pos != posicao_antiga):
+                new_tabuleiro[(pos)] = old_tabuleiro[(pos)]
+
+        result = jogos_iia.GameState(
+            to_move = other_player(state.to_move),
+            utility = self.calcular_utilidade(new_tabuleiro,player), #FIXME: TODO:
+            board = (state.board[0] + 1, new_tabuleiro),
+            moves = self.possible_moves(new_tabuleiro, other_player(player))) #TODO:
+        
+        
+        return result
 
     def utility(self, state, player):
         """Calculo da utilidade de um estado na perspectiva de um dado jogador.

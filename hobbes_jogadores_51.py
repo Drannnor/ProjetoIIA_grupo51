@@ -1,3 +1,4 @@
+from math import sqrt
 import jogos_iia
 import hobbes_jogo_51
 
@@ -11,10 +12,17 @@ def f_aval_hobbes_F1(state, jogador):
 
 # TODO:
 def f_aval_hobbes_F2(state, jogador):
-    acts = actions(state)
-    (x,y) = find_player(state, 'b' if (jogador == 'b') else 'p')
-    
-    return
+    acts = state.moves
+    (x,y) = find_player(state, 'p' if (jogador == 'b') else 'b')
+    (fs,(ssx, ssy)) = acts[0]
+    min1 = pow(ssx * x,2)
+    min2 = pow(ssy * y,2)
+    min = math.sqrt(min1, min2)
+    for (fs,(ssx,ssy) in acts:
+        min1 = pow(ssx * x, 2)
+        min2 = pow(ssy * y, 2)
+        min if sqrt(min1, min2) > min else min = sqrt(min1, min2)
+    return min
 
 # TODO:
 def f_aval_hobbes_F3(state, jogador):

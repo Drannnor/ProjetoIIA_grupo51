@@ -84,7 +84,6 @@ class JogoHobbes(jogos_iia.Game):
 
     def actions(self, state):
         """Obtencao das jogadas possiveis, dado um estado do jogo."""
-
         result = []
         tabuleiro = state.board.tabuleiro
 
@@ -103,63 +102,63 @@ class JogoHobbes(jogos_iia.Game):
         old_tabuleiro = state.board.tabuleiro
         new_tabuleiro = {}
         ((x1,y1),(x2,y2)) = move
-        jogador = find_player(state, self.pecas[player]) #FIXME: jogador => pos_jogador
-        posicao_antiga = old_tabuleiro[jogador]
+        pos_jogador = find_player(state, self.pecas[player]) #FIXME: pos_jogador => pos_jogador
+        posicao_antiga = old_tabuleiro[pos_jogador]
         
         (Vx,Vy) = (x2-x1, y2-y1)
         
         if(Vy == 0): #andou na horizontal
             if(Vx > 0):#andou para a direita
-                if(old_tabuleiro[(x1 + 1,y1)] == other_player(jogador)):
-                    new_tabuleiro[(x1 + 1,y1)] = jogador
+                if(old_tabuleiro[(x1 + 1,y1)] == other_player(pos_jogador)):
+                    new_tabuleiro[(x1 + 1,y1)] = pos_jogador
                     
                 elif(old_tabuleiro[(x1 + 1,y1)] == 'n'):
                     pos_neut_old = (x1 + 1,y1)
-                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2 + 1,y2)] = 'n'
                 else:
                     pos_neut_old = (x1 - 1,y1)
-                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2 - 1,y2)] = 'n'
                     
-            else:
-                if(old_tabuleiro[(x1 - 1,y1)] == other_player(jogador)):
-                    new_tabuleiro[(x1 - 1,y1)] = jogador
+            else:# andou para a esquerda
+                if(old_tabuleiro[(x1 - 1,y1)] == other_player(pos_jogador)):
+                    new_tabuleiro[(x1 - 1,y1)] = pos_jogador
                     
                 elif(old_tabuleiro[(x1 - 1,y1)] == 'n'):
                     pos_neut_old = (x1 - 1,y1)
-                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2 - 1,y2)] = 'n'
                 else:
                     pos_neut_old = (x1 + 1,y1)
-                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2 + 1,y2)] = 'n'
                  
         else: #andou na vertical
-            if(Vy > 0):#andou para a direita
-                if(old_tabuleiro[(x1,y1 + 1)] == other_player(jogador)):
-                    new_tabuleiro[(x1,y1 + 1)] = jogador
+            if(Vy > 0):#andou para cima
+                if(old_tabuleiro[(x1,y1 + 1)] == other_player(pos_jogador)):
+                    new_tabuleiro[(x1,y1 + 1)] = pos_jogador
                     
                 elif(old_tabuleiro[(x1,y1 + 1)] == 'n'):
                     pos_neut_old = (x1,y1 + 1)
-                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2,y2 + 1)] = 'n'
                 else:
                     pos_neut_old = (x1,y1 - 1)
-                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2,y2 - 1)] = 'n'
                     
-            else:
-                if(old_tabuleiro[(x1,y1 - 1)] == other_player(jogador)):
-                    new_tabuleiro[(x1,y1 - 1)] = jogador
+            else: # andou para baixo
+                if(old_tabuleiro[(x1,y1 - 1)] == other_player(pos_jogador)):
+                    new_tabuleiro[(x1,y1 - 1)] = pos_jogador
                     
                 elif(old_tabuleiro[(x1,y1 - 1)] == 'n'):
                     pos_neut_old = (x1,y1 - 1)
-                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2,y2 - 1)] = 'n'
                 else:
                     pos_neut_old = (x1,y1 + 1)
-                    new_tabuleiro[(x2,y2)] = jogador
+                    new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2,y2 + 1)] = 'n'
 
         board_key_list = old_tabuleiro.keys()

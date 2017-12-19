@@ -108,7 +108,8 @@ class JogoHobbes(jogos_iia.Game):
         if(Vy == 0): #andou na horizontal
             if(Vx > 0):#andou para a direita
                 if(old_tabuleiro[(x1 + 1,y1)] == other_player(pos_jogador)):
-                    new_tabuleiro[(x1 + 1,y1)] = pos_jogador  
+                    new_tabuleiro[(x1 + 1,y1)] = pos_jogador
+                    
                 elif(old_tabuleiro[(x1 + 1,y1)] == 'n'):
                     pos_neut_old = (x1 + 1,y1)
                     new_tabuleiro[(x2,y2)] = pos_jogador

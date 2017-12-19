@@ -170,16 +170,20 @@ class JogoHobbes(jogos_iia.Game):
             moves = self.possible_moves(new_tabuleiro, other_player(player))) #TODO:
 
         return result
+    
+    def calcular_utilidade(tabuleiro, player):
+        res = 0
+        pcs = tabuleiro.keys()# FIXME: DIOOOOGOOOOOO!!!!
+        for curr in pecas:
+            if pcs[curr] in ('p', 'b'):
+                res += 1 if pcs[curr] == self.pecas[player] else -1
+        return res
 
     def utility(self, state, player):
         """Calculo da utilidade de um estado na perspectiva de um dado jogador.
         Devera ter o valor 1, para o caso de vitoria, ou −1, para o caso de derrota."""
-        search = 0
-        pecas = state.board.tabuleiro.keys() # FIXME: DIOOOOGOOOOOO!!!!
-        for curr in pecas:
-            if pecas[curr] in ('p', 'b'):
-                search += 1 if pecas[curr] == self.pecas[player] else -1
-        return search
+
+        return state.utility
 
     def terminal_test(self, state):
         return self.utility(state, 'rei branco') != 0 or state.board.jogadas == 50

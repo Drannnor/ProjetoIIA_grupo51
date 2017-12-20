@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 ## Plataforma Alfa-Beta
 ## Definição:
 ## - do  tipo ResultadoJogo
 ## - de funções para realizar jogos.
 ##
 
-from collections import namedtuple
 import random
+from collections import namedtuple
+
 import jogos_iia
 
 """

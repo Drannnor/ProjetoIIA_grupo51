@@ -197,13 +197,13 @@ class JogoHobbes(jogos_iia.Game):
 
         result = jogos_iia.GameState(
             to_move=next_player,
-            utility=self.calcular_utilidade(new_tabuleiro, to_be_moves, next_player, player),
+            utility=self.calcular_utilidade(new_tabuleiro, to_be_moves, next_player),
             board=(state.board[0] + 1, new_tabuleiro),
             moves=to_be_moves)
 
         return result
 
-    def calcular_utilidade(self, tabuleiro, moves, to_move, player):
+    def calcular_utilidade(self, tabuleiro, moves, player):
 
         res = 0
         pcs = tabuleiro.keys()
@@ -212,9 +212,9 @@ class JogoHobbes(jogos_iia.Game):
                 res += 1 if tabuleiro[curr] == self.pecas[player] else -1
 
         if res == 0 and len(moves) == 0:
-            res = -1 if to_move == player else 1
+            res = -1
 
-        return res
+        return res if player == self.jogadores[0] else res * -1
 
     def utility(self, state, player):
         """Calculo da utilidade de um estado na perspectiva de um dado jogador.

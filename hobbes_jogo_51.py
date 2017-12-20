@@ -1,6 +1,6 @@
-import jogos_iia
 from collections import namedtuple
 
+import jogos_iia
 
 Board = namedtuple('Board', 'jogadas, tabuleiro')
 BOARDSIZE = 5
@@ -61,25 +61,44 @@ class JogoHobbes(jogos_iia.Game):
                        self.first_step_rec(tabuleiro, stepped, (x - 1, y), player) +\
                        self.first_step_rec(tabuleiro, stepped, (x, y - 1), player)
 
-    def second_step_direction(self,tabuleiro, pos, dir):
-
-        result = []
-        (posx, posy) = pos
-        (dirx, diry) = dir
-        curr_pos = pos
-        if 
-        while
+    def valida(self, posicao):
+        (x, y) = posicao
+        return self.size >= x > 0 and self.size >= y > 0
 
     def second_step(self, tabuleiro, pos_ini, player):
-        (x, y) = pos_ini
+        enemy = other_player(player)
 
-        if tabuleiro[(x + 1, y)] == self.pecas[other_player(player)]:
-            return 
+        def second_step_direction(dir):
+            result = []
+            (dirx, diry) = dir
+            (posx, posy) = pos_ini
+            push = False
+            curr_x = posx + dirx
+            curr_y = posy + diry
 
-        return self.second_step_direction(tabuleiro, pos_ini, (1, 0))  +\
-               self.second_step_direction(tabuleiro, pos_ini, (0, 1))  +\
-               self.second_step_direction(tabuleiro, pos_ini, (-1, 0)) +\
-               self.second_step_direction(tabuleiro, pos_ini, (0, -1)) 
+            if not self.valida((curr_x, curr_y)):
+                return result
+
+            if tabuleiro[(curr_x, curr_y)] == self.pecas[enemy]:
+                return [(pos_ini, (curr_x, curr_y))]
+
+            if tabuleiro[(curr_x, curr_y)] == self.pecas['neutra']:
+                curr_x += dirx
+                curr_y += diry
+                push = True
+            elif tabuleiro[(posx - dirx, posy - diry)] != self.pecas['neutra']:
+                return []
+
+            while (self.valida(curr_x, curr_y) and tabuleiro[(curr_x, curr_y)] in ['n', self.pecas[enemy]]):
+                if push:
+                    result.append((pos_ini, (curr_x - dirx, curr_y - diry)))
+                else:
+                    result.append((pos_ini, (curr_x, curr_y)))
+
+        return second_step_direction((1, 0)) + \
+               second_step_direction((0, 1)) + \
+               second_step_direction((-1, 0)) + \
+               second_step_direction((0, -1))
 
     def actions(self, state):
         """Obtencao das jogadas possiveis, dado um estado do jogo."""

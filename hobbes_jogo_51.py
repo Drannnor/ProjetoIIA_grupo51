@@ -165,12 +165,14 @@ class JogoHobbes(jogos_iia.Game):
             if pos != pos_neut_old and pos != posicao_antiga:
                 new_tabuleiro[(pos)] = old_tabuleiro[(pos)]
 
+        to_be_moves = self.possible_moves(new_tabuleiro, other_player(player))) #TODO:
+                
         result = jogos_iia.GameState(
             to_move = other_player(state.to_move),
-            moves = self.possible_moves(new_tabuleiro, other_player(player))) #TODO:
-            utility = self.calcular_utilidade(new_tabuleiro, moves, to_move, other_player(player)),
+            utility = self.calcular_utilidade(new_tabuleiro, to_be_moves, to_move, other_player(player)),
             board = (state.board[0] + 1, new_tabuleiro),
-            
+            moves = to_be_moves,
+        )
 
         return result
     

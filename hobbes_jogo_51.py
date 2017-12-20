@@ -199,8 +199,8 @@ class JogoHobbes(jogos_iia.Game):
         res = 0
         pcs = tabuleiro.keys()
         for curr in pcs:
-            if pcs[curr] in ['p', 'b']:
-                res += 1 if pcs[curr] == self.pecas[player] else -1
+            if tabuleiro[curr] in ['p', 'b']:
+                res += 1 if tabuleiro[curr] == self.pecas[player] else -1
 
         if res == 0 and len(moves) == 0:
             res = -1 if to_move == player else 1
@@ -220,7 +220,7 @@ class JogoHobbes(jogos_iia.Game):
         """Mostra uma representacao de um estado do jogo."""
         dic_linhas = {1: '5', 2: '4', 3: '3', 4: '2', 5: '1'}
 
-        tab = state.board.tabuleiro
+        tab = state.board[1]  # FIXME:
         print("Tabuleiro actual:" + "\n")
         for x in range(1, self.size + 1):
             for y in range(1, self.size + 1):

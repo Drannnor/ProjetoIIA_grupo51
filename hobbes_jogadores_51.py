@@ -14,22 +14,23 @@ MAXSIDES = 4
 def f_aval_hobbes_F1(state, jogador):
     return len(state.moves)
 
-# quanto menor a distanciaentreaosicao do outro jogador e a possivel posicao do jogador atual, melhor é;
+
+# quanto menor a distancia entrea posicao do outro jogador e a possivel posicao do jogador atual, melhor é;
 # heuristica 2
 def f_aval_hobbes_F2(state, jogador):
     acts = state.moves
-    (x,y) = hobbes_jogo_51.find_player(state, 'p' if (jogador == 'b') else 'b')
+    (x, y) = hobbes_jogo_51.find_player(state.board[1], 'p' if (jogador == 'b') else 'b')
     (fs,(ssx, ssy)) = acts[0]
     min = MAXNORM
-    for (fs, (ssx, ssy)) in acts:  # FIXME: alguma coisa esta mal aqui, provavelmente imports
+    for (fs, (ssx, ssy)) in acts:
         norm = math.sqrt(pow(ssy * y, 2) + pow(ssx * x, 2))
         min = norm if norm < min else min
     return MAXNORM - min
 
 #quantos mais espaços livres adjacentes tem, por acoes disponiveis, melhor é; heuristica 3
 def f_aval_hobbes_F3(state, jogador):
-    (x,y) = hobbes_jogo_51.find_player(state, 'b' if (jogador == 'b') else 'p')
-    tab = state.board.tabuleiro
+    (x, y) = hobbes_jogo_51.find_player(state.board[1], 'b' if (jogador == 'b') else 'p')
+    tab = state.board[1]
     sum = 4 # lados livres
 
     if x - 1 > 0 and tab[(x - 1, y)] == 'n':  # primeira casa à esquerda esta ocupada ou é limite

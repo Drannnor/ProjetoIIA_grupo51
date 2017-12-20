@@ -14,7 +14,7 @@ def find_player(tabuleiro, player):
         if tabuleiro[pos] == player:
             return pos
 
-    return None
+    return (0, 0)
 
 
 def other_player(player):
@@ -113,11 +113,9 @@ class JogoHobbes(jogos_iia.Game):
                    second_step_direction((0, -1))
 
         first_steps = first_step()
-        print(first_steps)
         for posic in first_steps:
             result += second_step(posic)
 
-        print(result)
         return result
 
     def actions(self, state):

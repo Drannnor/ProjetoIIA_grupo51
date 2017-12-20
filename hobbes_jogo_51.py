@@ -7,15 +7,14 @@ BOARDSIZE = 5
 
 
 def find_player(tabuleiro, player):
+
     posicoes = tabuleiro.keys()
 
-    i = 0
-    pos = posicoes[i]
-    while tabuleiro[pos] != player:
-        pos = posicoes[i]
-        i += 1
+    for pos in posicoes:
+        if tabuleiro[pos] == player:
+            return pos
 
-    return pos
+    return None
 
 
 def other_player(player):
@@ -58,9 +57,9 @@ class JogoHobbes(jogos_iia.Game):
 
             def first_step_rec(pos):
                 (x, y) = pos
-                ocup = tabuleiro[pos]
 
-                if self.valida(pos) and ocup == self.pecas['neutras'] and ocup != player and stepped[pos]:
+                if pos not in stepped or (pos in tabuleiro and (tabuleiro[pos] == self.pecas['neutras'] or
+                                                                tabuleiro[pos] != player)):
                     return []
 
                 stepped[pos] = True
@@ -120,7 +119,7 @@ class JogoHobbes(jogos_iia.Game):
         old_tabuleiro = state.board.tabuleiro
         new_tabuleiro = {}
         ((x1, y1), (x2, y2)) = move
-        pos_jogador = find_player(state, self.pecas[player])
+        pos_jogador = find_player(old_tabuleiro, self.pecas[player])
         posicao_antiga = old_tabuleiro[pos_jogador]
         pos_neut_old = (0, 0)
 
@@ -200,7 +199,7 @@ class JogoHobbes(jogos_iia.Game):
         res = 0
         pcs = tabuleiro.keys()
         for curr in pcs:
-            if pcs[curr] in ('p', 'b'):
+            if pcs[curr] in ['p', 'b']:
                 res += 1 if pcs[curr] == self.pecas[player] else -1
 
         if res == 0 and len(moves) == 0:
@@ -224,19 +223,20 @@ class JogoHobbes(jogos_iia.Game):
         tab = state.board.tabuleiro
         print("Tabuleiro actual:" + "\n")
         for x in range(1, self.size + 1):
-            for y in range(self.size + 1):
-                if y == 0:
+            for y in range(1, self.size + 1):
+                if y == 1:
                     print(dic_linhas[x], end='  |')
-                elif (x, y) in tab:
+                if (x, y) in tab:
                     if tab[(x,y)] == 'b':
                         print(' b |')
-                    elif tab[(x, y)] == 'p' :
+                    elif tab[(x, y)] == 'p':
                         print(' p |')
-                    elif tab[(x, y)] == 'n' :
+                    elif tab[(x, y)] == 'n':
                         print(' n |')
                 else:
                     print('   |')
-            print('------------------------')  # 4 traços x 6 vezes = 24 traços
+            print('\n')
+            print('------------------------\n')  # 4 traços x 6 vezes = 24 traços
         print('     A    B   C   D    E')
 
         if self.terminal_test(state):

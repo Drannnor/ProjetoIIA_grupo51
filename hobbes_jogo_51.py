@@ -225,20 +225,20 @@ class JogoHobbes(jogos_iia.Game):
 
         tab = state.board.tabuleiro
         print("Tabuleiro actual:" + "\n")
-        for x in range(1, self.size + 1):
-            for y in range(self.size + 1):
+        for x in range(1, BOARDSIZE + 1):
+            for y in range(BOARDSIZE + 1):
                 if y == 0:
                     print(dic_linhas[x], end='  |')
                 elif (x, y) in tab:
                     if tab[(x,y)] == 'b':
-                        print(' b |')
+                        print(' b ', end='|')
                     elif tab[(x, y)] == 'p' :
-                        print(' p |')
+                        print(' p ', end='|')
                     elif tab[(x, y)] == 'n' :
-                        print(' n |')
+                        print(' n ', end='|')
                 else:
-                    print('   |')
-            print('------------------------')  # 4 traços x 6 vezes = 24 traços
+                    print('   ', end='|')
+            print('------------------------' + '\n')  # 4 traços x 6 vezes = 24 traços
         print('     A    B   C   D    E')
 
         if self.terminal_test(state):

@@ -59,8 +59,9 @@ class JogoHobbes(jogos_iia.Game):
             def first_step_rec(pos):
                 (x, y) = pos
 
-                if pos not in stepped or (pos in tabuleiro and (tabuleiro[pos] == self.pecas['neutras'] or
-                                                                tabuleiro[pos] != player)):
+                if pos not in stepped or stepped[pos] or (pos in tabuleiro and
+                                                          (tabuleiro[pos] == self.pecas['neutras'] or
+                                                           tabuleiro[pos] == self.pecas[enemy])):
                     return []
 
                 stepped[pos] = True
@@ -81,24 +82,30 @@ class JogoHobbes(jogos_iia.Game):
                 curr_x = posx + dirx
                 curr_y = posy + diry
 
-                if not self.valida((curr_x, curr_y)):
+                if not self.valida((curr_x, curr_y)):  # out of bounds
                     return res
 
-                if tabuleiro[(curr_x, curr_y)] == self.pecas[enemy]:
+                if (curr_x, curr_y) in tabuleiro and tabuleiro[(curr_x, curr_y)] == self.pecas[enemy]:
                     return [(pos_ini, (curr_x, curr_y))]
 
-                if tabuleiro[(curr_x, curr_y)] == self.pecas['neutra']:
+                if (curr_x, curr_y) in tabuleiro and tabuleiro[(curr_x, curr_y)] == self.pecas['neutras']:  # Empurra
                     curr_x += dirx
                     curr_y += diry
                     push = True
-                elif tabuleiro[(posx - dirx, posy - diry)] != self.pecas['neutra']:
+                elif (posx - dirx, posy - diry) not in tabuleiro or \
+                        tabuleiro[(posx - dirx, posy - diry)] != self.pecas['neutras']:  # puxar ou falhar
                     return res
 
-                while self.valida((curr_x, curr_y)) and tabuleiro[(curr_x, curr_y)] not in ['n', self.pecas[enemy]]:
+                while self.valida((curr_x, curr_y)) and \
+                        ((curr_x, curr_y) not in tabuleiro or tabuleiro[(curr_x, curr_y)] == self.pecas[player]):
                     if push:
                         res.append((pos_ini, (curr_x - dirx, curr_y - diry)))
                     else:
                         res.append((pos_ini, (curr_x, curr_y)))
+                    curr_x += dirx
+                    curr_y += diry
+
+                return res
 
             return second_step_direction((1, 0)) + \
                    second_step_direction((0, 1)) + \
@@ -106,9 +113,11 @@ class JogoHobbes(jogos_iia.Game):
                    second_step_direction((0, -1))
 
         first_steps = first_step()
+        print(first_steps)
         for posic in first_steps:
             result += second_step(posic)
 
+        print(result)
         return result
 
     def actions(self, state):
@@ -118,72 +127,72 @@ class JogoHobbes(jogos_iia.Game):
     def result(self, state, move):
         """Obtencao do estado que se obtem ao executar uma dada jogada num dado estado."""
         player = state.to_move
-        old_tabuleiro = state.board.tabuleiro
+        old_tabuleiro = state.board[1]
         new_tabuleiro = {}
         ((x1, y1), (x2, y2)) = move
-        pos_jogador = find_player(old_tabuleiro, self.pecas[player])
-        posicao_antiga = old_tabuleiro[pos_jogador]
+        peca_jogador = self.pecas[player]
+        pos_jogador = find_player(old_tabuleiro, peca_jogador)
         pos_neut_old = (0, 0)
 
         (Vx, Vy) = (x2 - x1, y2 - y1)
 
         if Vy == 0:  # andou na horizontal
             if Vx > 0:  # andou para a direita
-                if old_tabuleiro[(x1 + 1, y1)] == other_player(pos_jogador):
-                    new_tabuleiro[(x1 + 1, y1)] = pos_jogador
+                if (x1 + 1, y1) in old_tabuleiro and old_tabuleiro[(x1 + 1, y1)] == other_player(player):
+                    new_tabuleiro[(x1 + 1, y1)] = peca_jogador
 
-                elif old_tabuleiro[(x1 + 1, y1)] == 'n':
+                elif (x1 + 1, y1) in old_tabuleiro and old_tabuleiro[(x1 + 1, y1)] == 'n':
                     pos_neut_old = (x1 + 1, y1)
-                    new_tabuleiro[(x2, y2)] = pos_jogador
+                    new_tabuleiro[(x2, y2)] = peca_jogador
                     new_tabuleiro[(x2 + 1, y2)] = 'n'
                 else:
                     pos_neut_old = (x1 - 1, y1)
-                    new_tabuleiro[(x2, y2)] = pos_jogador
+                    new_tabuleiro[(x2, y2)] = peca_jogador
                     new_tabuleiro[(x2 - 1, y2)] = 'n'
 
             else:  # andou para a esquerda
-                if old_tabuleiro[(x1 - 1, y1)] == other_player(pos_jogador):
-                    new_tabuleiro[(x1 - 1, y1)] = pos_jogador
+                if (x1 - 1, y1) in old_tabuleiro and old_tabuleiro[(x1 - 1, y1)] == other_player(player):
+                    new_tabuleiro[(x1 - 1, y1)] = peca_jogador
 
-                elif old_tabuleiro[(x1 - 1, y1)] == 'n':
+                elif (x1 - 1, y1) in old_tabuleiro and old_tabuleiro[(x1 - 1, y1)] == 'n':
                     pos_neut_old = (x1 - 1, y1)
-                    new_tabuleiro[(x2, y2)] = pos_jogador
+                    new_tabuleiro[(x2, y2)] = peca_jogador
                     new_tabuleiro[(x2 - 1, y2)] = 'n'
                 else:
                     pos_neut_old = (x1 + 1, y1)
-                    new_tabuleiro[(x2, y2)] = pos_jogador
+                    new_tabuleiro[(x2, y2)] = peca_jogador
                     new_tabuleiro[(x2 + 1, y2)] = 'n'
 
         else:  # andou na vertical
             if Vy > 0:  # andou para cima
-                if old_tabuleiro[(x1, y1 + 1)] == other_player(pos_jogador):
-                    new_tabuleiro[(x1, y1 + 1)] = pos_jogador
+                if (x1, y1 + 1) in old_tabuleiro and old_tabuleiro[(x1, y1 + 1)] == other_player(player):
+                    new_tabuleiro[(x1, y1 + 1)] = peca_jogador
 
-                elif old_tabuleiro[(x1, y1 + 1)] == 'n':
+                elif (x1, y1 + 1) in old_tabuleiro and old_tabuleiro[(x1, y1 + 1)] == 'n':
                     pos_neut_old = (x1, y1 + 1)
-                    new_tabuleiro[(x2, y2)] = pos_jogador
+                    new_tabuleiro[(x2, y2)] = peca_jogador
                     new_tabuleiro[(x2, y2 + 1)] = 'n'
                 else:
                     pos_neut_old = (x1, y1 - 1)
-                    new_tabuleiro[(x2, y2)] = pos_jogador
+                    new_tabuleiro[(x2, y2)] = peca_jogador
                     new_tabuleiro[(x2, y2 - 1)] = 'n'
 
             else:  # andou para baixo
-                if old_tabuleiro[(x1, y1 - 1)] == other_player(pos_jogador):
-                    new_tabuleiro[(x1, y1 - 1)] = pos_jogador
+                if (x1, y1 - 1) in old_tabuleiro and old_tabuleiro[(x1, y1 - 1)] == other_player(player):
+                    new_tabuleiro[(x1, y1 - 1)] = peca_jogador
 
-                elif old_tabuleiro[(x1, y1 - 1)] == 'n':
+                elif (x1, y1 - 1) in old_tabuleiro and old_tabuleiro[(x1, y1 - 1)] == 'n':
                     pos_neut_old = (x1, y1 - 1)
-                    new_tabuleiro[(x2, y2)] = pos_jogador
+                    new_tabuleiro[(x2, y2)] = peca_jogador
                     new_tabuleiro[(x2, y2 - 1)] = 'n'
                 else:
                     pos_neut_old = (x1, y1 + 1)
-                    new_tabuleiro[(x2, y2)] = pos_jogador
+                    new_tabuleiro[(x2, y2)] = peca_jogador
                     new_tabuleiro[(x2, y2 + 1)] = 'n'
 
         board_key_list = old_tabuleiro.keys()
         for pos in board_key_list:
-            if pos != pos_neut_old and pos != posicao_antiga:
+            if pos != pos_neut_old and pos != pos_jogador:
                 new_tabuleiro[pos] = old_tabuleiro[pos]
 
         to_be_moves = self.possible_moves(new_tabuleiro, other_player(player))
@@ -217,7 +226,7 @@ class JogoHobbes(jogos_iia.Game):
         return state.utility
 
     def terminal_test(self, state):
-        return self.utility(state, 'rei branco') != 0 or state.board.jogadas == 50
+        return state.utility != 0 or state.board[0] == 50
 
     def display(self, state):
         """Mostra uma representacao de um estado do jogo."""
@@ -225,16 +234,17 @@ class JogoHobbes(jogos_iia.Game):
 
         tab = state.board[1]  # FIXME:
         print("Tabuleiro actual:" + "\n")
-        for y in range(1, self.size + 1):
+        print('   ---------------------')
+        for y in range(self.size, 0, -1):
             for x in range(1, self.size + 1):
                 if x == 1:
-                    print(dic_linhas[y], end='  |')
+                    print(y, end='  |')
                 if (x, y) in tab:
-                    if tab[(x,y)] == 'b':
+                    if tab[(x, y)] == 'b':
                         print(' b ', end='|')
-                    elif tab[(x, y)] == 'p' :
+                    elif tab[(x, y)] == 'p':
                         print(' p ', end='|')
-                    elif tab[(x, y)] == 'n' :
+                    elif tab[(x, y)] == 'n':
                         print(' n ', end='|')
                 else:
                     print('   ', end='|')

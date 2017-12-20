@@ -6,17 +6,15 @@ Board = namedtuple('Board', 'jogadas, tabuleiro')
 BOARDSIZE = 5
 
 
-def find_player(state, player):
-    tabuleiro = state.board.tabuleiro
+def find_player(tabuleiro, player):
+
     posicoes = tabuleiro.keys()
 
-    i = 0
-    pos = posicoes[i]
-    while tabuleiro[pos] != player:
-        pos = posicoes[i]
-        i += 1
+    for pos in posicoes:
+        if tabuleiro[pos] == player:
+            return pos
 
-    return pos
+    return None
 
 
 def other_player(player):
@@ -43,78 +41,78 @@ class JogoHobbes(jogos_iia.Game):
             board=Board(0, tabuleiro_inicial),
             moves=movimentos_iniciais)
 
-    def first_step(self, tabuleiro, pos_real, player):
-        stepped = {}
-        for coluna in range(1, self.size + 1):
-            for linha in range(1, self.size + 1):
-                stepped[(coluna, linha)] = False
-
-        return self.first_step_rec(tabuleiro, stepped, pos_real, player)
-
-    def first_step_rec(self, tabuleiro, stepped, pos, player):
-        (x, y) = pos
-        ocup = tabuleiro[pos]
-
-        if ocup == self.pecas['neutras'] and ocup != player and stepped[pos]:
-            return []
-
-        stepped[pos] = True
-        return [pos] + self.first_step_rec(tabuleiro, stepped, (x + 1, y), player) + \
-               self.first_step_rec(tabuleiro, stepped, (x, y + 1), player) + \
-               self.first_step_rec(tabuleiro, stepped, (x - 1, y), player) + \
-               self.first_step_rec(tabuleiro, stepped, (x, y - 1), player)
-
     def valida(self, posicao):
         (x, y) = posicao
         return self.size >= x > 0 and self.size >= y > 0
 
-    def second_step(self, tabuleiro, pos_ini, player):
+    def possible_moves(self, tabuleiro, player):
+        result = []
+        pos_real = find_player(tabuleiro, self.pecas[player])
         enemy = other_player(player)
 
-        def second_step_direction(direction):
-            result = []
-            (dirx, diry) = direction
-            (posx, posy) = pos_ini
-            push = False
-            curr_x = posx + dirx
-            curr_y = posy + diry
+        def first_step():
+            stepped = {}
+            for coluna in range(1, self.size + 1):
+                for linha in range(1, self.size + 1):
+                    stepped[(coluna, linha)] = False
 
-            if not self.valida((curr_x, curr_y)):
-                return result
+            def first_step_rec(pos):
+                (x, y) = pos
 
-            if tabuleiro[(curr_x, curr_y)] == self.pecas[enemy]:
-                return [(pos_ini, (curr_x, curr_y))]
+                if pos not in stepped or (pos in tabuleiro and (tabuleiro[pos] == self.pecas['neutras'] or
+                                                                tabuleiro[pos] != player)):
+                    return []
 
-            if tabuleiro[(curr_x, curr_y)] == self.pecas['neutra']:
-                curr_x += dirx
-                curr_y += diry
-                push = True
-            elif tabuleiro[(posx - dirx, posy - diry)] != self.pecas['neutra']:
-                return result
+                stepped[pos] = True
+                return [pos] + first_step_rec((x + 1, y)) + \
+                       first_step_rec((x, y + 1)) + \
+                       first_step_rec((x - 1, y)) + \
+                       first_step_rec((x, y - 1))
 
-            while self.valida((curr_x, curr_y)) and tabuleiro[(curr_x, curr_y)] not in ['n', self.pecas[enemy]]:
-                if push:
-                    result.append((pos_ini, (curr_x - dirx, curr_y - diry)))
-                else:
-                    result.append((pos_ini, (curr_x, curr_y)))
+            return first_step_rec(pos_real)
 
-        return second_step_direction((1, 0)) + \
-               second_step_direction((0, 1)) + \
-               second_step_direction((-1, 0)) + \
-               second_step_direction((0, -1))
+        def second_step(pos_ini):
+
+            def second_step_direction(direction):
+                res = []
+                (dirx, diry) = direction
+                (posx, posy) = pos_ini
+                push = False
+                curr_x = posx + dirx
+                curr_y = posy + diry
+
+                if not self.valida((curr_x, curr_y)):
+                    return res
+
+                if tabuleiro[(curr_x, curr_y)] == self.pecas[enemy]:
+                    return [(pos_ini, (curr_x, curr_y))]
+
+                if tabuleiro[(curr_x, curr_y)] == self.pecas['neutra']:
+                    curr_x += dirx
+                    curr_y += diry
+                    push = True
+                elif tabuleiro[(posx - dirx, posy - diry)] != self.pecas['neutra']:
+                    return res
+
+                while self.valida((curr_x, curr_y)) and tabuleiro[(curr_x, curr_y)] not in ['n', self.pecas[enemy]]:
+                    if push:
+                        res.append((pos_ini, (curr_x - dirx, curr_y - diry)))
+                    else:
+                        res.append((pos_ini, (curr_x, curr_y)))
+
+            return second_step_direction((1, 0)) + \
+                   second_step_direction((0, 1)) + \
+                   second_step_direction((-1, 0)) + \
+                   second_step_direction((0, -1))
+
+        first_steps = first_step()
+        for posi in first_steps:
+            result += second_step(posi)
+        return result
 
     def actions(self, state):
         """Obtencao das jogadas possiveis, dado um estado do jogo."""
-        result = []
-        tabuleiro = state.board.tabuleiro
-
-        pos_real = find_player(state, self.pecas[state.to_move])
-
-        first_steps = self.first_step(tabuleiro, pos_real, state.to_move)
-        for pos in first_steps:
-            result += self.second_step(tabuleiro, pos, state.to_move)
-
-        return result
+        return state.moves
 
     def result(self, state, move):
         """Obtencao do estado que se obtem ao executar uma dada jogada num dado estado."""
@@ -122,7 +120,7 @@ class JogoHobbes(jogos_iia.Game):
         old_tabuleiro = state.board.tabuleiro
         new_tabuleiro = {}
         ((x1, y1), (x2, y2)) = move
-        pos_jogador = find_player(state, self.pecas[player])
+        pos_jogador = find_player(old_tabuleiro, self.pecas[player])
         posicao_antiga = old_tabuleiro[pos_jogador]
         pos_neut_old = (0, 0)
 
@@ -202,7 +200,7 @@ class JogoHobbes(jogos_iia.Game):
         res = 0
         pcs = tabuleiro.keys()
         for curr in pcs:
-            if pcs[curr] in ('p', 'b'):
+            if pcs[curr] in ['p', 'b']:
                 res += 1 if pcs[curr] == self.pecas[player] else -1
 
         if res == 0 and len(moves) == 0:
@@ -225,11 +223,11 @@ class JogoHobbes(jogos_iia.Game):
 
         tab = state.board.tabuleiro
         print("Tabuleiro actual:" + "\n")
-        for x in range(1, BOARDSIZE + 1):
-            for y in range(BOARDSIZE + 1):
-                if y == 0:
+        for x in range(1, self.size + 1):
+            for y in range(1, self.size + 1):
+                if y == 1:
                     print(dic_linhas[x], end='  |')
-                elif (x, y) in tab:
+                if (x, y) in tab:
                     if tab[(x,y)] == 'b':
                         print(' b ', end='|')
                     elif tab[(x, y)] == 'p' :
@@ -238,7 +236,8 @@ class JogoHobbes(jogos_iia.Game):
                         print(' n ', end='|')
                 else:
                     print('   ', end='|')
-            print('------------------------' + '\n')  # 4 traços x 6 vezes = 24 traços
+            print('\n')
+            print('------------------------\n')  # 4 traços x 6 vezes = 24 traços
         print('     A    B   C   D    E')
 
         if self.terminal_test(state):

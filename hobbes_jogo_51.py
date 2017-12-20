@@ -14,7 +14,7 @@ def find_player(tabuleiro, player):
         if tabuleiro[pos] == player:
             return pos
 
-    return None
+    return (0, 0)
 
 
 def other_player(player):

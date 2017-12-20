@@ -6,8 +6,7 @@ Board = namedtuple('Board', 'jogadas, tabuleiro')
 BOARDSIZE = 5
 
 
-def find_player(state, player):
-    tabuleiro = state.board.tabuleiro
+def find_player(tabuleiro, player):
     posicoes = tabuleiro.keys()
 
     i = 0
@@ -21,7 +20,6 @@ def find_player(state, player):
 
 def other_player(player):
     return "rei preto" if player == "rei branco" else "rei branco"
-
 
 class JogoHobbes(jogos_iia.Game):
 
@@ -43,78 +41,78 @@ class JogoHobbes(jogos_iia.Game):
             board=Board(0, tabuleiro_inicial),
             moves=movimentos_iniciais)
 
-    def first_step(self, tabuleiro, pos_real, player):
-        stepped = {}
-        for coluna in range(1, self.size + 1):
-            for linha in range(1, self.size + 1):
-                stepped[(coluna, linha)] = False
-
-        return self.first_step_rec(tabuleiro, stepped, pos_real, player)
-
-    def first_step_rec(self, tabuleiro, stepped, pos, player):
-        (x, y) = pos
-        ocup = tabuleiro[pos]
-
-        if ocup == self.pecas['neutras'] and ocup != player and stepped[pos]:
-            return []
-
-        stepped[pos] = True
-        return [pos] + self.first_step_rec(tabuleiro, stepped, (x + 1, y), player) + \
-               self.first_step_rec(tabuleiro, stepped, (x, y + 1), player) + \
-               self.first_step_rec(tabuleiro, stepped, (x - 1, y), player) + \
-               self.first_step_rec(tabuleiro, stepped, (x, y - 1), player)
-
     def valida(self, posicao):
         (x, y) = posicao
         return self.size >= x > 0 and self.size >= y > 0
 
-    def second_step(self, tabuleiro, pos_ini, player):
+    def possible_moves(self, tabuleiro, player):
+        result = []
+        pos_real = find_player(tabuleiro, self.pecas[player])
         enemy = other_player(player)
 
-        def second_step_direction(direction):
-            result = []
-            (dirx, diry) = direction
-            (posx, posy) = pos_ini
-            push = False
-            curr_x = posx + dirx
-            curr_y = posy + diry
+        def first_step():
+            stepped = {}
+            for coluna in range(1, self.size + 1):
+                for linha in range(1, self.size + 1):
+                    stepped[(coluna, linha)] = False
 
-            if not self.valida((curr_x, curr_y)):
-                return result
+            def first_step_rec(pos):
+                (x, y) = pos
+                ocup = tabuleiro[pos]
 
-            if tabuleiro[(curr_x, curr_y)] == self.pecas[enemy]:
-                return [(pos_ini, (curr_x, curr_y))]
+                if self.valida(pos) and ocup == self.pecas['neutras'] and ocup != player and stepped[pos]:
+                    return []
 
-            if tabuleiro[(curr_x, curr_y)] == self.pecas['neutra']:
-                curr_x += dirx
-                curr_y += diry
-                push = True
-            elif tabuleiro[(posx - dirx, posy - diry)] != self.pecas['neutra']:
-                return result
+                stepped[pos] = True
+                return [pos] + first_step_rec((x + 1, y)) + \
+                       first_step_rec((x, y + 1)) + \
+                       first_step_rec((x - 1, y)) + \
+                       first_step_rec((x, y - 1))
 
-            while self.valida((curr_x, curr_y)) and tabuleiro[(curr_x, curr_y)] not in ['n', self.pecas[enemy]]:
-                if push:
-                    result.append((pos_ini, (curr_x - dirx, curr_y - diry)))
-                else:
-                    result.append((pos_ini, (curr_x, curr_y)))
+            return first_step_rec(pos_real)
 
-        return second_step_direction((1, 0)) + \
-               second_step_direction((0, 1)) + \
-               second_step_direction((-1, 0)) + \
-               second_step_direction((0, -1))
+        def second_step(pos_ini):
+
+            def second_step_direction(direction):
+                res = []
+                (dirx, diry) = direction
+                (posx, posy) = pos_ini
+                push = False
+                curr_x = posx + dirx
+                curr_y = posy + diry
+
+                if not self.valida((curr_x, curr_y)):
+                    return res
+
+                if tabuleiro[(curr_x, curr_y)] == self.pecas[enemy]:
+                    return [(pos_ini, (curr_x, curr_y))]
+
+                if tabuleiro[(curr_x, curr_y)] == self.pecas['neutra']:
+                    curr_x += dirx
+                    curr_y += diry
+                    push = True
+                elif tabuleiro[(posx - dirx, posy - diry)] != self.pecas['neutra']:
+                    return res
+
+                while self.valida((curr_x, curr_y)) and tabuleiro[(curr_x, curr_y)] not in ['n', self.pecas[enemy]]:
+                    if push:
+                        res.append((pos_ini, (curr_x - dirx, curr_y - diry)))
+                    else:
+                        res.append((pos_ini, (curr_x, curr_y)))
+
+            return second_step_direction((1, 0)) + \
+                   second_step_direction((0, 1)) + \
+                   second_step_direction((-1, 0)) + \
+                   second_step_direction((0, -1))
+
+        first_steps = first_step()
+        for posi in first_steps:
+            result += second_step(posi)
+        return result
 
     def actions(self, state):
         """Obtencao das jogadas possiveis, dado um estado do jogo."""
-        result = []
-        tabuleiro = state.board.tabuleiro
-
-        pos_real = find_player(state, self.pecas[state.to_move])
-
-        first_steps = self.first_step(tabuleiro, pos_real, state.to_move)
-        for pos in first_steps:
-            result += self.second_step(tabuleiro, pos, state.to_move)
-
-        return result
+        return state.moves
 
     def result(self, state, move):
         """Obtencao do estado que se obtem ao executar uma dada jogada num dado estado."""

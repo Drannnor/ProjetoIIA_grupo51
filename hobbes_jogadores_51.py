@@ -19,6 +19,8 @@ def f_aval_hobbes_F1(state, jogador):
 # heuristica 2
 def f_aval_hobbes_F2(state, jogador):
     acts = state.moves
+    if len(acts) == 0:
+        return 0
     (x, y) = hobbes_jogo_51.find_player(state.board[1], 'p' if (jogador == 'b') else 'b')
     (fs,(ssx, ssy)) = acts[0]
     min = MAXNORM

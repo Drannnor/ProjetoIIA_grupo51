@@ -20,6 +20,7 @@ def find_player(tabuleiro, player):
 def other_player(player):
     return "rei preto" if player == "rei branco" else "rei branco"
 
+
 class JogoHobbes(jogos_iia.Game):
 
     def __init__(self):
@@ -228,13 +229,13 @@ class JogoHobbes(jogos_iia.Game):
                     print(dic_linhas[x], end='  |')
                 if (x, y) in tab:
                     if tab[(x,y)] == 'b':
-                        print(' b |')
-                    elif tab[(x, y)] == 'p':
-                        print(' p |')
-                    elif tab[(x, y)] == 'n':
-                        print(' n |')
+                        print(' b ', end='|')
+                    elif tab[(x, y)] == 'p' :
+                        print(' p ', end='|')
+                    elif tab[(x, y)] == 'n' :
+                        print(' n ', end='|')
                 else:
-                    print('   |')
+                    print('   ', end='|')
             print('\n')
             print('------------------------\n')  # 4 traços x 6 vezes = 24 traços
         print('     A    B   C   D    E')

@@ -19,7 +19,7 @@ j6 = jogar.Jogador(jogo_hobbes, "Nisco", f=jogar.random_player)
 
 # 3 = jogar.Jogador(jogo_hobbes, "MaisPeões", hobbes.jogador_2peoes_F1)
 
-resultado = jogar.um_jogo(jogo_hobbes, j2, j3, 3, True)
+resultado = jogar.um_jogo(jogo_hobbes, j2, j5, 3, True)
 
 print(resultado)
 

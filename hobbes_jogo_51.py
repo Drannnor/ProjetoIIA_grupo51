@@ -113,11 +113,8 @@ class JogoHobbes(jogos_iia.Game):
                    second_step_direction((0, -1))
 
         first_steps = first_step()
-        print(first_steps)
         for posic in first_steps:
             result += second_step(posic)
-
-        print(result)
         return result
 
     def actions(self, state):
@@ -232,7 +229,7 @@ class JogoHobbes(jogos_iia.Game):
         """Mostra uma representacao de um estado do jogo."""
         dic_linhas = {1: '5', 2: '4', 3: '3', 4: '2', 5: '1'}
 
-        tab = state.board[1]  # FIXME:
+        tab = state.board[1]
         print("Tabuleiro actual:" + "\n")
         print('   ---------------------')
         for y in range(self.size, 0, -1):

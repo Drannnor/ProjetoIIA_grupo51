@@ -21,7 +21,7 @@ def f_aval_hobbes_F2(state, jogador):
     (x,y) = hobbes_jogo_51.find_player(state, 'p' if (jogador == 'b') else 'b')
     (fs,(ssx, ssy)) = acts[0]
     min = MAXNORM
-    for (fs, (ssx, ssy)) in acts:  # FIXME: alguma coisa esta mal aqui, provavelmente imports
+    for (fs, (ssx, ssy)) in acts:
         norm = math.sqrt(pow(ssy * y, 2) + pow(ssx * x, 2))
         min = norm if norm < min else min
     return MAXNORM - min
@@ -32,19 +32,17 @@ def f_aval_hobbes_F3(state, jogador):
     tab = state.board.tabuleiro
     sum = 4 # lados livres
 
-    if x - 1 > 0 and tab[(x - 1, y)] == 'n':  # primeira casa à esquerda esta ocupada ou é limite
-        if x - 2 > 0 and tab[(x - 2, y)] == 'n':  # a segunda casa à esquerda esta ocupada ou é limite
+    if x - 1 > 0 and (x - 1, y) in tab and tab[(x - 1, y)] == 'n':  # primeira casa à esquerda esta ocupada ou é limite
+        if x - 2 > 0 and (x - 2, y) in tab and tab[(x - 2, y)] == 'n':  # a segunda casa à esquerda esta ocupada ou é limite
             sum -= 1
-    if x + 1 < hobbes_jogo_51.BOARDSIZE and tab[(x + 1, y)] == 'n':  # primeira casa à direita esta ocupada ou é limite
-        if x - 2 < hobbes_jogo_51.BOARDSIZE and tab[
-            (x + 2, y)] == 'n':  #a segunda casa à direita esta ocupada ou é limite
+    if x + 1 < hobbes_jogo_51.BOARDSIZE and (x + 1, y) in tab and tab[(x + 1, y)] == 'n':  # primeira casa à direita esta ocupada ou é limite
+        if x - 2 < hobbes_jogo_51.BOARDSIZE and (x + 2, y) in tab and tab[(x + 2, y)] == 'n':  #a segunda casa à direita esta ocupada ou é limite
             sum -= 1
-    if y - 1 > 0 and tab[(x, y - 1)] == 'n':  # primeira casa em baixo esta ocupada ou é limite
-        if y - 2 > 0 and tab[(x, y - 2)] == 'n':  #a segunda casa em baixo esta ocupada ou é limite
+    if y - 1 > 0 and (x, y - 1) in tab and tab[(x, y - 1)] == 'n':  # primeira casa em baixo esta ocupada ou é limite
+        if y - 2 > 0 and (x, y - 2) in tab and tab[(x, y - 2)] == 'n':  #a segunda casa em baixo esta ocupada ou é limite
             sum -= 1
-    if y + 1 < hobbes_jogo_51.BOARDSIZE and tab[(x, y + 1)] == 'n':  # primeira casa em cima esta ocupada ou é limite
-        if y + 2 < hobbes_jogo_51.BOARDSIZE and tab[
-            (x, y + 2)] == 'n':  #a segunda casa em cima esta ocupada ou é limite
+    if y + 1 < hobbes_jogo_51.BOARDSIZE and (x, y + 1) in tab and tab[(x, y + 1)] == 'n':  # primeira casa em cima esta ocupada ou é limite
+        if y + 2 < hobbes_jogo_51.BOARDSIZE and (x, y + 2) in tab and tab[(x, y + 2)] == 'n':  #a segunda casa em cima esta ocupada ou é limite
             sum -= 1         
 
     return sum

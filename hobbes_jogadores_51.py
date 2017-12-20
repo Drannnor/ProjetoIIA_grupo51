@@ -41,17 +41,15 @@ def f_aval_hobbes_F3(state, jogador):
     if y-1 > 0  and tab[(x,y-1)] == 'n': # primeira casa em baixo esta ocupada ou é limite
         if y-2 > 0  and tab[(x,y-2)] == 'n': #a segunda casa em baixo esta ocupada ou é limite
             sum -= 1
-    if y+1 > 0  and tab[(x,y+1)] == 'n': # primeira casa em cima esta ocupada ou é limite
-        if y+2 > 0  and tab[(x,y+2)] == 'n': #a segunda casa em cima esta ocupada ou é limite
+    if y+1 < hobbes_jogo_51.BOARDSIZE  and tab[(x,y+1)] == 'n': # primeira casa em cima esta ocupada ou é limite
+        if y+2 < hobbes_jogo_51.BOARDSIZE  and tab[(x,y+2)] == 'n': #a segunda casa em cima esta ocupada ou é limite
             sum -= 1         
 
     return sum
 
-
-# TODO:
 def f_aval_hobbes_F4(state, jogador):
     return f_aval_hobbes_F1(state, jogador) * f_aval_hobbes_F3(state, jogador)
-         
+
 def f_aval_hobbes_F5(state, jogador):
     return f_aval_hobbes_F1(state, jogador) * 0.7 +  f_aval_hobbes_F2(state, jogador) * 0.3
 

@@ -193,11 +193,11 @@ class JogoHobbes(jogos_iia.Game):
                 new_tabuleiro[pos] = old_tabuleiro[pos]
 
         to_be_moves = self.possible_moves(new_tabuleiro, other_player(player))
-        next_player = other_player(state.to_move)
+        next_player = other_player(player)
 
         result = jogos_iia.GameState(
             to_move=next_player,
-            utility=self.calcular_utilidade(new_tabuleiro, to_be_moves, next_player, other_player(player)),
+            utility=self.calcular_utilidade(new_tabuleiro, to_be_moves, next_player, player),
             board=(state.board[0] + 1, new_tabuleiro),
             moves=to_be_moves)
 
@@ -219,7 +219,7 @@ class JogoHobbes(jogos_iia.Game):
     def utility(self, state, player):
         """Calculo da utilidade de um estado na perspectiva de um dado jogador.
         Devera ter o valor 1, para o caso de vitoria, ou −1, para o caso de derrota."""
-
+        print(state.utility)
         return state.utility
 
     def terminal_test(self, state):

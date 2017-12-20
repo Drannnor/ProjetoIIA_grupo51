@@ -54,8 +54,12 @@ def f_aval_hobbes_F4(state, jogador):
     return f_aval_hobbes_F1(state, jogador) * f_aval_hobbes_F3(state, jogador)
 
 def f_aval_hobbes_F5(state, jogador):
-    return f_aval_hobbes_F1(state, jogador) * 0.7 +  f_aval_hobbes_F2(state, jogador) * 0.3
+    return f_aval_hobbes_F1(state, jogador) * 0.5 + f_aval_hobbes_F2(state, jogador) * 0.5
 
+
+def f_aval_hobbes_F6(state, jogador):
+    return f_aval_hobbes_F1(state, jogador) * 0.3 + f_aval_hobbes_F2(state, jogador) * 0.3 + \
+           f_aval_hobbes_F2(state, jogador) * 0.3
 
 def jogador_hobbes_F1(jogo, state, nivel=5):
     return jogos_iia.alphabeta_cutoff_search(state, jogo, nivel, eval_fn=f_aval_hobbes_F1)
@@ -75,3 +79,7 @@ def jogador_hobbes_F4(jogo, state, nivel=5):
 
 def jogador_hobbes_F5(jogo, state, nivel=5):
     return jogos_iia.alphabeta_cutoff_search(state, jogo, nivel, eval_fn=f_aval_hobbes_F5)
+
+
+def jogador_hobbes_F6(jogo, state, nivel=5):
+    return jogos_iia.alphabeta_cutoff_search(state, jogo, nivel, eval_fn=f_aval_hobbes_F6)

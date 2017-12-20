@@ -20,9 +20,9 @@ j6 = jogar.Jogador(jogo_hobbes, "Nisco", f=jogar.random_player)
 # 3 = jogar.Jogador(jogo_hobbes, "MaisPeões", hobbes.jogador_2peoes_F1)
 
 
-# resultado = jogar.um_jogo(jogo_hobbes, j2, j5, 3, True)
+# resultado = jogar.um_jogo(jogo_hobbes, j3, j5, 3, True)
 
 # print(resultado)
 
-njogos = jogar.n_pares_de_jogos(jogo_hobbes, 20, j6, j1, 5)
+njogos = jogar.n_pares_de_jogos(jogo_hobbes, 10, j6, j5, 3)
 print(njogos)

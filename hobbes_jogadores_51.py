@@ -30,25 +30,30 @@ def f_aval_hobbes_F2(state, jogador):
 def f_aval_hobbes_F3(state, jogador):
     (x,y) = hobbes_jogo_51.find_player(state, 'b' if (jogador == 'b') else 'p')
     tab = state.board.tabuleiro
-    sum = 0 # lados livres
-    for i in range(4):
-        if x-1 > 0 and tab[(x,y)] == None: # FIXME: none eh com maiuscula
-            sum += 1
-        if x+1 <= hobbes_jogo_51.BOARDSIZE and tab[(x+1,y)] == None:
-            sum += 1
-        if y-1 > 0 and tab[(x,y-1)] == None:
-            sum += 1
-        if y+1 <= hobbes_jogo_51.BOARDSIZE and tab[(x,y)] == None:
-            sum += 1
-         
-    h1 = f_aval_hobbes_F1(state, jogador)
+    sum = 4 # lados livres
+    
+    if x-1 > 0 and tab[(x-1,y)] == 'n': # primeira casa à esquerda esta ocupada ou é limite
+        if x-2 > 0 and tab[(x-2,y)] == 'n': #a segunda casa à esquerda esta ocupada ou é limite
+            sum -= 1
+    if x+1 < hobbes_jogo_51.BOARDSIZE and tab[(x+1,y)] == 'n': # primeira casa à direita esta ocupada ou é limite
+        if x-2 < hobbes_jogo_51.BOARDSIZE and tab[(x+2,y)] == 'n': #a segunda casa à direita esta ocupada ou é limite
+            sum -= 1
+    if y-1 > 0  and tab[(x,y-1)] == 'n': # primeira casa em baixo esta ocupada ou é limite
+        if y-2 > 0  and tab[(x,y-2)] == 'n': #a segunda casa em baixo esta ocupada ou é limite
+            sum -= 1
+    if y+1 > 0  and tab[(x,y+1)] == 'n': # primeira casa em cima esta ocupada ou é limite
+        if y+2 > 0  and tab[(x,y+2)] == 'n': #a segunda casa em cima esta ocupada ou é limite
+            sum -= 1         
 
-    return h1/(MAXSIDES - sum + 1) # FIXME: mudei coisas porque nao corria
+    return sum
 
 
 # TODO:
 def f_aval_hobbes_F4(state, jogador):
-    return
+    return f_aval_hobbes_F1(state, jogador) * f_aval_hobbes_F3(state, jogador)
+         
+def f_aval_hobbes_F5(state, jogador):
+    return f_aval_hobbes_F1(state, jogador) * 0.7 +  f_aval_hobbes_F2(state, jogador) * 0.3
 
 def jogador_hobbes_F1(jogo, state, nivel=5): #FIXME:
     return jogos_iia.alphabeta_cutoff_search(state, jogo, nivel, eval_fn=f_aval_hobbes_F1)

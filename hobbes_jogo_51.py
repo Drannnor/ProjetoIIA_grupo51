@@ -221,14 +221,21 @@ class JogoHobbes(jogos_iia.Game):
         """Mostra uma representacao de um estado do jogo."""
         dic_linhas = {1: '5', 2: '4', 3: '3', 4: '2', 5: '1'}
 
-        board = state.board.tabuleiro
-        print("Tabuleiro actual:")
+        tab = state.board.tabuleiro
+        print("Tabuleiro actual:" + "\n")
         for x in range(1, self.size + 1):
-            for y in range(1, self.size + 1):
-                if y == 1:
+            for y in range(self.size + 1):
+                if y == 0:
                     print(dic_linhas[x], end='  |')
-                if (x, y) in board:
-
+                elif (x, y) in tab:
+                    if tab[(x,y)] == 'b':
+                        print(' b |')
+                    elif tab[(x, y)] == 'p' :
+                        print(' p |')
+                    elif tab[(x, y)] == 'n' :
+                        print(' n |')
+                else:
+                    print('   |')
             print('------------------------')  # 4 traços x 6 vezes = 24 traços
         print('     A    B   C   D    E')
 

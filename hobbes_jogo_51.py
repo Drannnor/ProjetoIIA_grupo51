@@ -106,8 +106,9 @@ class JogoHobbes(jogos_iia.Game):
                    second_step_direction((0, -1))
 
         first_steps = first_step()
-        for posi in first_steps:
-            result += second_step(posi)
+        for posic in first_steps:
+            result += second_step(posic)
+
         return result
 
     def actions(self, state):
@@ -187,6 +188,7 @@ class JogoHobbes(jogos_iia.Game):
 
         to_be_moves = self.possible_moves(new_tabuleiro, other_player(player))
         next_player = other_player(state.to_move)
+
         result = jogos_iia.GameState(
             to_move=next_player,
             utility=self.calcular_utilidade(new_tabuleiro, to_be_moves, next_player, other_player(player)),
@@ -223,10 +225,10 @@ class JogoHobbes(jogos_iia.Game):
 
         tab = state.board[1]  # FIXME:
         print("Tabuleiro actual:" + "\n")
-        for x in range(1, self.size + 1):
-            for y in range(1, self.size + 1):
-                if y == 1:
-                    print(dic_linhas[x], end='  |')
+        for y in range(1, self.size + 1):
+            for x in range(1, self.size + 1):
+                if x == 1:
+                    print(dic_linhas[y], end='  |')
                 if (x, y) in tab:
                     if tab[(x,y)] == 'b':
                         print(' b ', end='|')
@@ -236,9 +238,9 @@ class JogoHobbes(jogos_iia.Game):
                         print(' n ', end='|')
                 else:
                     print('   ', end='|')
-            print('\n')
-            print('------------------------\n')  # 4 traços x 6 vezes = 24 traços
-        print('     A    B   C   D    E')
+            print()
+            print('   ---------------------')  # 4 traços x 6 vezes = 24 traços
+        print('     A   B   C   D   E')
 
         if self.terminal_test(state):
             print("FIM do Jogo")

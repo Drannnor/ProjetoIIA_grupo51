@@ -167,17 +167,18 @@ class JogoHobbes(jogos_iia.Game):
 
         result = jogos_iia.GameState(
             to_move = other_player(state.to_move),
-            utility = self.calcular_utilidade(new_tabuleiro,other_player(player)),
-            board = (state.board[0] + 1, new_tabuleiro),
             moves = self.possible_moves(new_tabuleiro, other_player(player))) #TODO:
+            utility = self.calcular_utilidade(new_tabuleiro, moves, to_move, other_player(player)),
+            board = (state.board[0] + 1, new_tabuleiro),
+            
 
         return result
     
-    def calcular_utilidade(self, tabuleiro, moves, to_move, player): #FIXME: se metes parametros novos, tens de fazer
-                                                                     #as alteracoes onde a funcao eh chamada DIOGO!
+    def calcular_utilidade(self, tabuleiro, moves, to_move, player):
+                                                                    
         res = 0
         pcs = tabuleiro.keys()
-        for curr in pecas: # FIXME: pecas vem de onde?
+        for curr in pcs:
             if pcs[curr] in ('p', 'b'):
                 res += 1 if pcs[curr] == self.pecas[player] else -1
                 
@@ -195,7 +196,7 @@ class JogoHobbes(jogos_iia.Game):
     def terminal_test(self, state):
         return self.utility(state, 'rei branco') != 0 or state.board.jogadas == 50
 
-    def display(self, state): #FIXME: e as neutras? caro Nisco
+    def display(self, state):
         """Mostra uma representacao de um estado do jogo."""
 
         dic_linhas = {1 : '5', 2 : '4', 3 : '3', 4 : '2', 5 : '1'}
@@ -210,6 +211,8 @@ class JogoHobbes(jogos_iia.Game):
                     print(' b', end=' |')
                 elif (y, x) in board['p']:
                     print(' p', end=' |')
+                elif (y, x) in board['n']:
+                    print(' n', end=' |')
                 else:
                     print('  ', end=' |')
 

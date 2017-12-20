@@ -1,7 +1,5 @@
-import jogos_iia
 import hobbes_jogo_51
-from math import pow, sqrt
-
+import jogos_iia
 
 MAXNORM = 10
 MAXSIDES = 4
@@ -16,7 +14,7 @@ def f_aval_hobbes_F1(state, jogador):
 
 # quanto menor a distanciaentreaosicao do outro jogador e a possivel posicao do jogador atual, melhor é;
 # heuristica 2
-def f_aval_hobbes_F2(state, jogador):
+"""def f_aval_hobbes_F2(state, jogador):
     acts = state.moves
     (x,y) = hobbes_jogo_51.find_player(state, 'p' if (jogador == 'b') else 'b')
     (fs,(ssx, ssy)) = acts[0]
@@ -24,7 +22,7 @@ def f_aval_hobbes_F2(state, jogador):
     for (fs,(ssx,ssy) in acts: # FIXME: alguma coisa esta mal aqui, provavelmente imports
         norm = sqrt(pow(ssy * y,2), pow(ssx * x,2))
         min = norm if norm < min else min
-    return MAXNORM - min
+    return MAXNORM - min"""
 
 #quantos mais espaços livres adjacentes tem, por acoes disponiveis, melhor é; heuristica 3
 def f_aval_hobbes_F3(state, jogador):

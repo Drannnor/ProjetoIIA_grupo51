@@ -1,8 +1,9 @@
-from collections import namedtuple
 import jogos_iia
+from collections import namedtuple
+
 
 Board = namedtuple('Board', 'jogadas, tabuleiro')
-
+BOARDSIZE = 5
 
 def find_player(state, player):
     tabuleiro = state.board.tabuleiro
@@ -26,7 +27,7 @@ class JogoHobbes(jogos_iia.Game):
 
         self.jogadores = ('rei preto', 'rei branco')
         self.pecas = {'rei preto':'p', 'rei branco':'b', 'neutras':'n'}
-        self.size = 5
+        self.size = BOARDSIZE
         tabuleiro_inicial = {(2, 1): 'n', (2, 2): 'n', (2, 4): 'n', (2, 5): 'n',
                              (3, 1): 'p', (3, 2): 'n', (3, 4): 'n', (3, 5): 'b',
                              (4, 1): 'n', (4, 2): 'n', (4, 4): 'n', (4, 5): 'n'}
@@ -72,7 +73,7 @@ class JogoHobbes(jogos_iia.Game):
     def second_step(self, tabuleiro, pos_ini, player):
         (x, y) = pos_ini
 
-        if tabuleiro[(x + 1, y)] == self.pecas[other_player(player)]
+        if tabuleiro[(x + 1, y)] == self.pecas[other_player(player)]:
             return 
 
         return self.second_step_direction(tabuleiro, pos_ini, (1, 0))  +\
@@ -95,22 +96,22 @@ class JogoHobbes(jogos_iia.Game):
 
     def result(self, state, move):
         """Obtencao do estado que se obtem ao executar uma dada jogada num dado estado."""
-        # TODO: pelo Nisco
         player = state.to_move
         old_tabuleiro = state.board.tabuleiro
         new_tabuleiro = {}
         ((x1,y1),(x2,y2)) = move
-        pos_jogador = find_player(state, self.pecas[player]) #FIXME: pos_jogador => pos_jogador
+        pos_jogador = find_player(state, self.pecas[player])
         posicao_antiga = old_tabuleiro[pos_jogador]
+        pos_neut_old = (0, 0)
         
         (Vx,Vy) = (x2-x1, y2-y1)
         
-        if(Vy == 0): #andou na horizontal
-            if(Vx > 0):#andou para a direita
-                if(old_tabuleiro[(x1 + 1,y1)] == other_player(pos_jogador)):
+        if Vy == 0: #andou na horizontal
+            if Vx > 0:#andou para a direita
+                if old_tabuleiro[(x1 + 1,y1)] == other_player(pos_jogador):
                     new_tabuleiro[(x1 + 1,y1)] = pos_jogador
                     
-                elif(old_tabuleiro[(x1 + 1,y1)] == 'n'):
+                elif old_tabuleiro[(x1 + 1,y1)] == 'n':
                     pos_neut_old = (x1 + 1,y1)
                     new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2 + 1,y2)] = 'n'
@@ -120,10 +121,10 @@ class JogoHobbes(jogos_iia.Game):
                     new_tabuleiro[(x2 - 1,y2)] = 'n'  
 
             else:# andou para a esquerda
-                if(old_tabuleiro[(x1 - 1,y1)] == other_player(pos_jogador)):
+                if old_tabuleiro[(x1 - 1,y1)] == other_player(pos_jogador):
                     new_tabuleiro[(x1 - 1,y1)] = pos_jogador
                     
-                elif(old_tabuleiro[(x1 - 1,y1)] == 'n'):
+                elif old_tabuleiro[(x1 - 1,y1)] == 'n':
                     pos_neut_old = (x1 - 1,y1)
                     new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2 - 1,y2)] = 'n'
@@ -133,11 +134,11 @@ class JogoHobbes(jogos_iia.Game):
                     new_tabuleiro[(x2 + 1,y2)] = 'n'
 
         else: #andou na vertical
-            if(Vy > 0):#andou para cima
-                if(old_tabuleiro[(x1,y1 + 1)] == other_player(pos_jogador)):
+            if Vy > 0:#andou para cima
+                if old_tabuleiro[(x1,y1 + 1)] == other_player(pos_jogador):
                     new_tabuleiro[(x1,y1 + 1)] = pos_jogador
                     
-                elif(old_tabuleiro[(x1,y1 + 1)] == 'n'):
+                elif old_tabuleiro[(x1,y1 + 1)] == 'n':
                     pos_neut_old = (x1,y1 + 1)
                     new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2,y2 + 1)] = 'n'
@@ -147,10 +148,10 @@ class JogoHobbes(jogos_iia.Game):
                     new_tabuleiro[(x2,y2 - 1)] = 'n'
                     
             else: # andou para baixo
-                if(old_tabuleiro[(x1,y1 - 1)] == other_player(pos_jogador)):
+                if old_tabuleiro[(x1,y1 - 1)] == other_player(pos_jogador):
                     new_tabuleiro[(x1,y1 - 1)] = pos_jogador
                     
-                elif(old_tabuleiro[(x1,y1 - 1)] == 'n'):
+                elif old_tabuleiro[(x1,y1 - 1)] == 'n':
                     pos_neut_old = (x1,y1 - 1)
                     new_tabuleiro[(x2,y2)] = pos_jogador
                     new_tabuleiro[(x2,y2 - 1)] = 'n'
@@ -161,7 +162,7 @@ class JogoHobbes(jogos_iia.Game):
 
         board_key_list = old_tabuleiro.keys()
         for pos in board_key_list:
-            if(pos != pos_neut_old AND pos != posicao_antiga):
+            if pos != pos_neut_old and pos != posicao_antiga:
                 new_tabuleiro[(pos)] = old_tabuleiro[(pos)]
 
         result = jogos_iia.GameState(
@@ -172,10 +173,11 @@ class JogoHobbes(jogos_iia.Game):
 
         return result
     
-    def calcular_utilidade(self, tabuleiro, moves, to_move, player):
+    def calcular_utilidade(self, tabuleiro, moves, to_move, player): #FIXME: se metes parametros novos, tens de fazer
+                                                                     #as alteracoes onde a funcao eh chamada DIOGO!
         res = 0
         pcs = tabuleiro.keys()
-        for curr in pecas:
+        for curr in pecas: # FIXME: pecas vem de onde?
             if pcs[curr] in ('p', 'b'):
                 res += 1 if pcs[curr] == self.pecas[player] else -1
                 
@@ -193,17 +195,17 @@ class JogoHobbes(jogos_iia.Game):
     def terminal_test(self, state):
         return self.utility(state, 'rei branco') != 0 or state.board.jogadas == 50
 
-    def display(self, state): #FIXME:
+    def display(self, state): #FIXME: e as neutras? caro Nisco
         """Mostra uma representacao de um estado do jogo."""
 
-        dicLinhas = {1 : '5', 2 : '4', 3 : '3', 4 : '2', 5 : '1'}
+        dic_linhas = {1 : '5', 2 : '4', 3 : '3', 4 : '2', 5 : '1'}
 
         board = state.board.tabuleiro
         print("Tabuleiro actual:")
         for x in range(1, self.size + 1):
             for y in range(1, self.size + 1):
                 if y == 1:
-                    print(dicLinhas[x], end='  |')
+                    print(dic_linhas[x], end='  |')
                 elif (y, x) in board['b']:
                     print(' b', end=' |')
                 elif (y, x) in board['p']:

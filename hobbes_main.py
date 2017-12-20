@@ -23,5 +23,5 @@ resultado = jogar.um_jogo(jogo_hobbes, j2, j5, 3, True)
 
 print(resultado)
 
-# njogos = jogar.n_pares_de_jogos(jogo_hobbes, 10, j2, j3, 5)
-# print(njogos)
+njogos = jogar.n_pares_de_jogos(jogo_hobbes, 20, j1, j2, 5)
+print(njogos)
